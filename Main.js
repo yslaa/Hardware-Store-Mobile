@@ -1,26 +1,19 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Home from '@navigators/Home'; 
+import ProductContainer from '@screens/Product/ProductContainer';
 
+const Stack = createStackNavigator();
 
-//import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-
-
-function MyComponent() {
+const Main = () => {
     return (
-        // <View style={styles.container}>
-            <Text >Hello</Text>
-        // </View>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Home" component={Home} />  
+            </Stack.Navigator> 
+        </NavigationContainer>     
     );
 };
 
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         backgroundColor: '#2c3e50',
-//     },
-// });
-
-
-export default MyComponent;
+export default Main;
