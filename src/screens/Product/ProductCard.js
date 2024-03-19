@@ -1,21 +1,23 @@
 import { StyleSheet, View, Dimensions, Image, Text, Button } from 'react-native'
 import React from 'react'
+import { tw } from 'nativewind'
 var { width } = Dimensions.get("window");
 const ProductCard = (props) => {
-    const { product_name, price, image, countInStock } = props;
+    const { product_name, price, image, stock } = props;
     
-    console.log('card:', product_name)
-    image.forEach((img, index) => {
-        console.log(`Image ${index + 1} URL:`, img.url);
-    });
+    // console.log('card:', product_name)
+    // image.forEach((img, index) => {
+    //     console.log(`Image ${index + 1} URL:`, img.url);
+    // });
+    // console.log(props)
     // console.log('img', image[0].url)
   return (
-    <View>
+    <View >
       <Image style={styles.image}
       resizeMode="contain"
       source={{ uri: image[0].url }} />
        <View style={styles.card} />
-            <Text style={styles.title}>
+            <Text >
                 {(product_name.length && product_name.length > 15) ? product_name.substring(0, 15 - 3)
                     + '...' : product_name
                 }
@@ -23,24 +25,24 @@ const ProductCard = (props) => {
 
             <Text style={styles.price}>${price}</Text>
 
-            {/* {countInStock > 0 ? (
+            {stock > 0 ? (
                 <View style={{ marginBottom: 60 }}>
                     <Button
                         title={'Add'}
                         color={'green'}
-                        // onPress={() => {
-                        //     dispatch(addToCart({ ...props, quantity: 1, })),
-                        //         Toast.show({
-                        //             topOffset: 60,
-                        //             type: "success",
-                        //             text1: `${name} added to Cart`,
-                        //             text2: "Go to your cart to complete order"
-                        //         })
-                        // }}
+                        onPress={() => {
+                            dispatch(addToCart({ ...props, quantity: 1, })),
+                                Toast.show({
+                                    topOffset: 60,
+                                    type: "success",
+                                    text1: `${product_name} added to Cart`,
+                                    text2: "Go to your cart to complete order"
+                                })
+                        }}
                     >
                     </Button>
                 </View>
-            ) : <Text style={{ marginTop: 20 }}>Currently Unavailable</Text>} */}
+            ) : <Text style={{ marginTop: 20 }}>Currently Unavailable</Text>}
     </View>
   )
 }

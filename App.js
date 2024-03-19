@@ -17,9 +17,9 @@ const theme = extendTheme({ colors: newColorTheme });
 export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
-
+    <NavigationContainer>
         <Main />
-
+        </NavigationContainer>
     </NativeBaseProvider>
   );
 }

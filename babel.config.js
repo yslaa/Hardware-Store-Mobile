@@ -8,10 +8,11 @@ module.exports = function(api) {
       ["module-resolver", {
         "root": ["./"],
         "alias": {
-          "@": "./",
+          "@/": "./",
           "@navigators": "./src/navigators",
           "@assets": "./assets",
           "@screens": "./src/screens",
+          "@shared": "./src/shared",
         }
       }]
     ]
