@@ -16,7 +16,7 @@ const ProductContainer = () => {
     const [products, setProducts] = useState([]);
     const [active, setActive] = useState([]);
     const [initialState, setInitialState] = useState([]);
-    const [focus, setFocus] = useState();
+    const [focus, setFocus] = useState(false);
     const [productsCtg, setProductsCtg] = useState([]);
     const [productsFiltered, setProductsFiltered] = useState([]);
 
@@ -33,7 +33,7 @@ const ProductContainer = () => {
                         setInitialState(res.data);
                         setProductsCtg(res.data);
                         setProductsFiltered(res.data);
-                        // console.log('Response data:', res.data);
+                        console.log('Response data:', res.data);
                     })
                     .catch((error) => {
                         console.log('Api call error', error);
@@ -51,20 +51,17 @@ const ProductContainer = () => {
         )
     ))
 
-//     console.log("Products:");
-// if (products.details) {
-//     products.details.forEach((product) => {
-//         console.log("Product Class:", product.class);
-//     });
-// } else {
-//     console.log("No products available");
-// }
-    
-   const searchProduct = (text) => {
-    setProductsFiltered(
-        products.filter((i) => i.name.toLowerCase().includes(text.toLowerCase()))
-    )
-    }
+    const searchProduct = (text) => {
+        if (!text) {
+            setProductsFiltered(products);
+            setFocus(false); // Remove focus when the search input is empty
+        } else {
+            setProductsFiltered(
+                products.details.filter((product) => product.product_name.toLowerCase().includes(text.toLowerCase()))
+            );
+            setFocus(true); // Set focus when there is text in the search input
+        }
+    };
 
     const openList = () => {
         setFocus(true);
@@ -90,13 +87,13 @@ const ProductContainer = () => {
                         px="2"
                         InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="search" />} />}
                         // InputRightElement={focus == true ? <SmallCloseIcon onPress={onBlur} /> : null}
-                        InputRightElement={focus === true ? <Icon ml="2" size="4" color="gray.400" as={<Ionicons name="close" size="12" color="black" onPress={onBlur} />} /> : null}
+                        InputRightElement={focus === true ? <Icon ml="2" size="4" color="gray.400" as={<Ionicons name="close" style = {{fontSize: 15, marginRight: 5}} onPress={() => { onBlur() }}  />} /> : null}
                     />
                 </VStack>
                 {focus === true ? (
-                    <SearchedProduct
-                        productsFiltered={productsFiltered}
-                    />
+                   <SearchedProduct
+                   productsFiltered={productsFiltered}
+               />
                     ) : (
 
         <ScrollView>
