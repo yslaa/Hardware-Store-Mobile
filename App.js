@@ -3,6 +3,7 @@ import { NativeBaseProvider, extendTheme } from "native-base";
 import { NavigationContainer } from '@react-navigation/native'
 import 'react-native-gesture-handler';
 import Main from './Main';
+import Auth from '@context/Store/Auth';
 
 const newColorTheme = {
   brand: {
@@ -16,10 +17,12 @@ const theme = extendTheme({ colors: newColorTheme });
 
 export default function App() {
   return (
+    <Auth>
     <NativeBaseProvider theme={theme}>
     <NavigationContainer>
         <Main />
         </NavigationContainer>
     </NativeBaseProvider>
+    </Auth>
   );
 }

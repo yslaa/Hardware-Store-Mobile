@@ -1,37 +1,55 @@
 
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { Component, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 const Stack = createStackNavigator();
-
 import Register from '@screens/User/Register';
+import Login from '@screens/User/Login';
+import UserProfile from '@screens/User/UserProfile';
+import UserEdit from '@screens/User/UserEdit'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const UserNavigation = () => {
+const UserNavigation = (props) => {
+   
     return (
         <Stack.Navigator>
-            <Stack.Screen
-            name='Register'
-            component={Register}
-            options={{
-                headerShown:false
-            }}
-            />
+     
+                <>
+                    <Stack.Screen
+                        name='Login'
+                        component={Login}
+                        options={{
+                            headerShown: false
+                        }}
+                    />
+                    <Stack.Screen
+                        name='Register'
+                        component={Register}
+                        options={{
+                            headerShown: false
+                        }}
+                    />
+                    <Stack.Screen
+                    name='User Profile'
+                    component={UserProfile}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Stack.Screen
+                    name='Edit User'
+                    component={UserEdit}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                </>
+                
+       
 
-            
 
         </Stack.Navigator>
     );
 };
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2c3e50',
-    },
-});
 
 
 export default UserNavigation;
