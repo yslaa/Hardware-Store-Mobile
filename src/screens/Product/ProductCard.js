@@ -2,88 +2,91 @@ import { StyleSheet, View, Dimensions, Image, Text, Button } from 'react-native'
 import React from 'react'
 import { tw } from 'nativewind'
 var { width } = Dimensions.get("window");
+import { addToCart } from '@redux/Actions/cartActions';
+import  {useSelector, useDispatch} from 'react-redux'
+import Toast from 'react-native-toast-message'
+
 const ProductCard = (props) => {
     const { product_name, price, image, stock } = props;
-    
-    // console.log('card:', product_name)
-    // image.forEach((img, index) => {
-    //     console.log(`Image ${index + 1} URL:`, img.url);
-    // });
-    // console.log(props)
-    // console.log('img', image[0].url)
-  return (
-    <View >
-      <Image style={styles.image}
-      resizeMode="contain"
-      source={{ uri: image[0].url }} />
-       <View style={styles.card} />
-            <Text >
-                {(product_name.length && product_name.length > 15) ? product_name.substring(0, 15 - 3)
-                    + '...' : product_name
-                }
-            </Text>
-
-            <Text style={styles.price}>${price}</Text>
-
-            {stock > 0 ? (
-                <View style={{ marginBottom: 60 }}>
+    const dispatch = useDispatch()
+    return (
+        <View style={styles.container }>
+            <Image
+                style={styles.image}
+                resizeMode="cover"
+                source={{ uri: image[0].url }}
+            />
+            <View style={styles.cardContent}>
+                <Text style={styles.title}>
+                    {(product_name.length && product_name.length > 15) ? product_name.substring(0, 15 - 3) + '...' : product_name}
+                </Text>
+                <Text style={styles.price}>${price}</Text>
+                {stock > 0 ? (
                     <Button
-                        title={'Add'}
+                        title={'Add to Cart'}
                         color={'green'}
+                   
                         onPress={() => {
                             dispatch(addToCart({ ...props, quantity: 1, })),
-                                Toast.show({
-                                    topOffset: 60,
-                                    type: "success",
-                                    text1: `${product_name} added to Cart`,
-                                    text2: "Go to your cart to complete order"
-                                })
+                            console.log(props)
+                            Toast.show({
+                                topOffset: 60,
+                                type: "success",
+                                text1: `${product_name} added to Cart`,
+                                text2: "Go to your cart to complete order"
+                            })
                         }}
-                    >
-                    </Button>
-                </View>
-            ) : <Text style={{ marginTop: 20 }}>Currently Unavailable</Text>}
-    </View>
-  )
-}
+                    />
+                ) : <Text style={styles.unavailableText}>Currently Unavailable</Text>}
+            </View>
+        </View>
+    );
+};
+
 
 const styles = StyleSheet.create({
     container: {
         width: width / 2 - 20,
-        height: width / 1.7,
-        padding: 10,
         borderRadius: 10,
-        marginTop: 55,
-        marginBottom: 5,
-        marginLeft: 10,
-        alignItems: 'center',
+        margin: 10,
+        overflow: 'hidden', 
         elevation: 8,
-        backgroundColor: 'white'
+        backgroundColor: 'white',       
     },
     image: {
-        width: width / 2 - 20 - 10,
-        height: width / 2 - 20 - 30,
-        backgroundColor: 'transparent',
+        width: '100%',
+        height: width / 2 - 20,
         position: 'absolute',
-        top: -45
+        top: 0,
+        left: 0,
+        
     },
-    card: {
-        marginBottom: 10,
-        height: width / 2 - 20 - 90,
-        backgroundColor: 'transparent',
-        width: width / 2 - 20 - 10
+    cardContent: {
+        padding: 10,
+        paddingTop: width / 2 - 20,
+        alignItems: 'center',
+        
     },
     title: {
-        fontWeight: "bold",
-        fontSize: 14,
-        textAlign: 'center'
+        fontSize: 12,
+        marginBottom: 5,
+        right: 35,
+        marginTop: 5
     },
     price: {
-        fontSize: 20,
-        color: 'orange',
-        marginTop: 10
-    }
-})
+        fontSize: 15,
+        color: 'green',
+        marginBottom: 10,
+        right: 50,
+    },
+    unavailableText: {
+        marginTop: 10,
+        textAlign: 'right'
+    },
+
+    
+});
+
 
 
 export default ProductCard

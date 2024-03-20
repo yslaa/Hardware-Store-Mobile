@@ -4,11 +4,17 @@ import { Left, Right, Container, H1, Center, Heading } from 'native-base'
 import TrafficLight from '@shared/StyledComponents/TrafficLight'
 import EasyButton from '@shared/StyledComponents/EasyButton'
 import Swiper from "react-native-swiper";
+import { addToCart } from '@redux/Actions/cartActions';
+import { useDispatch } from 'react-redux';
+import Toast from "react-native-toast-message";
+
 const SingleProduct = ({ route }) => {
     console.log(route)
     const [item, setItem] = useState(route.params.item)
     const [availability, setAvailability] = useState('')
     const [availabilityText, setAvailabilityText] = useState("")
+    const [quantity, setQuantity] = useState(1);
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         if(item.stock === 0)
@@ -30,6 +36,17 @@ const SingleProduct = ({ route }) => {
         }
     }, [])
 
+    const incrementQuantity = () => {
+        if(quantity < item.stock) {
+            setQuantity(prevQuantity => prevQuantity + 1);
+        }
+    }
+
+    const decrementQuantity = () => {
+        if(quantity > 1) {
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    }
   return (
     <Center flexGrow={1}>
     <ScrollView style={{ marginBottom: 80}}>
@@ -45,7 +62,7 @@ const SingleProduct = ({ route }) => {
     ))}
 </Swiper>
         <View style={styles.contentContainer}>
-            <Heading style={styles.contentHeader} size='xl'>{item.product_name}</Heading>
+            <Heading style={styles.contentHeader} >{item.product_name}</Heading>
             <Text >Class: {item.class}</Text>
             <Text >Price: ${item.price}</Text>
             <Text >Type: {item.type}</Text>
@@ -59,14 +76,35 @@ const SingleProduct = ({ route }) => {
                 {availability}
             </View>
             <Text>Stock: {item.stock}</Text>
+            {item.stock > 0 ? (
+              
+        <View style={styles.quantityContainer}>
+                            <Button title="-" onPress={decrementQuantity} />
+                            <Text style={styles.quantityText}>{quantity}</Text>
+                            <Button title="+" onPress={incrementQuantity} />
+                        </View>
+        ) :    <View style={styles.quantityContainer}>No Stock</View>}
         </View>
-        <EasyButton
-            primary
-            medium
-        >
 
-            <Text style={{ color: "white" }}> Add</Text>
-        </EasyButton>
+
+        {item.stock > 0 ? (
+            
+                    <Button
+                        title={'Add to Cart'}
+                        color={'green'}
+                   
+                        onPress={() => {
+                            dispatch(addToCart({ ...item, quantity: quantity })),
+                            setQuantity(1);
+                            Toast.show({
+                                topOffset: 60,
+                                type: "success",
+                                text1: `${item.product_name} added to Cart`,
+                                text2: "Go to your cart to complete order"
+                            })
+                        }}
+                    />
+                ) : <Text style={styles.unavailableText}>Currently Unavailable</Text>}
     </ScrollView>
 </Center >
   )
@@ -90,13 +128,13 @@ const styles = StyleSheet.create({
         marginTop: -40,
     },
     contentContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-
+        justifyContent: 'right',
+        alignItems: 'right',
+        paddingright: 10,
         marginBottom: 10,
     },
     contentHeader: {
-        fontWeight: 'bold',
+        fontSize: 20,
         marginBottom: 10,
     },
     contentText: {
@@ -130,6 +168,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-  
+   quantityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        marginTop: 10
+    },
+    quantityText: {
+        fontSize: 16,
+        marginHorizontal: 10,
+        
+    },
 });
 export default SingleProduct

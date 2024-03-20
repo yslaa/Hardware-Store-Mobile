@@ -109,6 +109,10 @@ const UserProfile = () => {
              <Text style={styles.name}> {userProfile ? userProfile.details.name : ""}</Text>
              <Text style={{fontSize: 13}}> Email: {userProfile ? userProfile.details.email : ""}</Text>
            </View>
+           <Button title={"Sign Out"} onPress={() => [
+                        AsyncStorage.removeItem("jwt"),
+                        logoutUser(context.dispatch)
+                    ]} />
          </View>
         
         

@@ -33,7 +33,7 @@ const ProductContainer = () => {
                         setInitialState(res.data);
                         setProductsCtg(res.data);
                         setProductsFiltered(res.data);
-                        console.log('Response data:', res.data);
+                        // console.log('Response data:', res.data);
                     })
                     .catch((error) => {
                         console.log('Api call error', error);

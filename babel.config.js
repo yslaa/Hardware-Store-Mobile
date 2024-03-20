@@ -14,6 +14,7 @@ module.exports = function(api) {
           "@screens": "./src/screens",
           "@shared": "./src/shared",
           "@context" : "./src/context",
+          "@redux" : "./src/redux",
         }
       }]
     ]
