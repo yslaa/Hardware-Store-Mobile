@@ -83,7 +83,7 @@ const SingleProduct = ({ route }) => {
                             <Text style={styles.quantityText}>{quantity}</Text>
                             <Button title="+" onPress={incrementQuantity} />
                         </View>
-        ) :    <View style={styles.quantityContainer}>No Stock</View>}
+        ) :    <Text style={styles.quantityContainer}>No Stock</Text>}
         </View>
 
 

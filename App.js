@@ -6,6 +6,7 @@ import Main from './Main';
 import Auth from '@context/Store/Auth';
 import { Provider } from 'react-redux';
 import store from '@redux/store';
+import DrawerNavigation from '@navigators/DrawerNavigation'
 
 const newColorTheme = {
   brand: {
@@ -23,7 +24,8 @@ export default function App() {
       <Provider store={store}>
     <NativeBaseProvider theme={theme}>
     <NavigationContainer>
-        <Main />
+      <DrawerNavigation/>
+        {/* <Main /> */}
         </NavigationContainer>
     </NativeBaseProvider>
     </Provider>

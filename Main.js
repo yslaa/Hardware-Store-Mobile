@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "@navigators/Home";
 import UserNavigator from "@navigators/UserNavigator";
 import CartNavigator from "@navigators/CartNavigator"
+import AdminNavigator from "@navigators/AdminNavigator"
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "native-base";
@@ -27,7 +28,24 @@ const Main = () => {
           tabBarIcon: ({ color }) => {
             return (
               <Ionicons
-                name="home"
+                name="home-outline"
+                style={{ position: "relative" }}
+                color="black"
+                size={30}
+              />
+            );
+          },
+        }}
+      />
+
+ <Tab.Screen
+        name="Admin"
+        component={AdminNavigator}
+        options={{
+          tabBarIcon: ({ color }) => {
+            return (
+              <Ionicons
+                name="briefcase-outline"
                 style={{ position: "relative" }}
                 color="black"
                 size={30}

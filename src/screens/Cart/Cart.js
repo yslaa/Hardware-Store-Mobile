@@ -111,10 +111,6 @@ const Cart = () => {
                 <Text style={{ color: 'white' }}>Clear</Text>
             </EasyButton>
         </HStack>
-        {/* <HStack justifyContent="space-between">
-           
-            <Button alignItems="center" colorScheme="primary" onPress={() => navigation.navigate('Checkout')}>Check Out</Button>
-        </HStack> */}
         {context.stateUser.isAuthenticated ? (
             <EasyButton
                 primary
