@@ -66,7 +66,7 @@ const Register = () => {
                 })
                 setTimeout(() => {
                     navigation.navigate("Login");
-                }, 500);
+                }, 100);
             }
         })
         .catch((error) => {

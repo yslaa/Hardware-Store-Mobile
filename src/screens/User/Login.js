@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, BackHandler } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Input from '@shared/Form/Input'
 import TitleContainer from '@shared/Form/TitleContainer'
@@ -9,6 +9,7 @@ import AuthGlobal from '@context/Store/AuthGlobal'
 import { Button } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { loginUser } from '@context/Actions/Auth.actions'
+import { StackActions } from '@react-navigation/native';
 
 const Login = (props) => {
     const context = useContext(AuthGlobal)
@@ -16,14 +17,11 @@ const Login = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState("")
-
-    useEffect(() =>
-    {
-        if(context.stateUser.isAuthenticated == true)
-        {
-            navigation.navigate("User Profile")
+    useEffect(() => {
+        if (context.stateUser.isAuthenticated === true) {
+            navigation.dispatch(StackActions.replace('User Profile'));
         }
-    }, [context.stateUser.isAuthenticated])
+    }, [context.stateUser.isAuthenticated]);
 
     const handleSubmit = () =>
     {
@@ -50,6 +48,9 @@ const Login = (props) => {
             })
         })
     })
+
+    
+
   return (
     <TitleContainer>
           <Input

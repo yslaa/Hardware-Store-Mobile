@@ -1,5 +1,5 @@
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer'
-import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon,} from "native-base";
+import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon} from "native-base";
 import React from 'react'
 import 'react-native-gesture-handler';
 import ProductContainer from '@screens/Product/ProductContainer';
@@ -9,6 +9,9 @@ import Cart from '@screens/Cart/Cart'
 import AdminNavigator from "@navigators/AdminNavigator"
 import ProductList from '@screens/Product/ProductList';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from '@react-navigation/native';
+import { Alert, BackHandler } from 'react-native';
+
 global.__reanimatedWorkletInit = () => { };
 const Drawer = createDrawerNavigator()
 
@@ -32,6 +35,8 @@ const getIcon = (screenName) => {
         return undefined;
     }
   };
+
+ 
 
   function CustomDrawerContent(props) {
     return (
@@ -131,6 +136,33 @@ const getIcon = (screenName) => {
   }
   
 const Index = () => {
+  
+  const handleBackPress = () => {
+    Alert.alert("Exit App", "Exiting the application?",[
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel"
+      },
+      {
+        text: "Ok",
+        onPress: () => BackHandler.exitApp()
+      },
+    ]);
+    return true
+  };
+
+  useFocusEffect(
+    React.useCallback(() => 
+    {
+      BackHandler.addEventListener("hardwareBackPress", handleBackPress)
+
+      return() => 
+      {
+        BackHandler.removeEventListener("hardwareBackPress", handleBackPress)
+      }
+    })
+  )
   return (
     <Box safeArea flex={1}>
     <Drawer.Navigator
