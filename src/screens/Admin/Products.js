@@ -64,6 +64,7 @@ const Products = (props) => {
             const products = productFilter.details.filter((item) => item.id !== id)
             setProductFilter(products)
         })
+        
         .catch((error) => console.log(error))
     }
 
@@ -80,7 +81,7 @@ const Products = (props) => {
                 setLoading(false);
             })
             setRefreshing(false);
-        }, 2000)
+        }, 500)
     })
 
     useFocusEffect(
@@ -109,6 +110,7 @@ const Products = (props) => {
         )
     )
 
+    
   return (
     <Box flex={1}>
         <View style={styles.buttonContainer}>

@@ -1,4 +1,4 @@
-import { View, Text, Modal, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Modal, TouchableOpacity, Image, StyleSheet, Dimensions, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,8 +10,25 @@ const ListItem = ({ item, index, deleteProduct }) => {
     const [modalShow, setModalShow] = useState(false);
     const navigation = useNavigation();
 
-    console.log("item", item);
+    // console.log("item", item);
 
+    const handleBackPress = () => {
+        Alert.alert("Delete Product", `Do you want to delete this ${item.product_name}?` ,[
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel"
+          },
+          {
+            text: "Delete",
+            onPress: () => [
+                deleteProduct(item._id),
+                setModalShow(false)
+            ]
+          },
+        ]);
+        return true
+      };
     return (
         <View>
             <Modal
@@ -52,10 +69,7 @@ const ListItem = ({ item, index, deleteProduct }) => {
                             <EasyButton
                                 medium
                                 danger
-                                onPress={() => [
-                                    deleteProduct(item._id),
-                                    setModalShow(false)
-                                ]}
+                                onPress={handleBackPress}
                                 title="delete"
                             >
                                 <Text style={styles.textStyle}>Delete</Text>
