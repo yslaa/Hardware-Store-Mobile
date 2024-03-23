@@ -82,7 +82,7 @@ const UserEdit = () => {
                 })
                 setTimeout(() => {
                     navigation.navigate("User Profile");
-                }, 500);
+                }, 100);
             }
         })
         .catch((error) => {

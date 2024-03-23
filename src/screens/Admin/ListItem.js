@@ -41,7 +41,7 @@ const ListItem = ({ item, index, deleteProduct }) => {
                                 medium
                                 secondary
                                 onPress={() => [
-                                    navigation.navigate("ProductForm", { item }),
+                                    navigation.navigate("ProductUpdate", { item }),
                                     setModalShow(false)
                                 ]}
                                 title="Edit"

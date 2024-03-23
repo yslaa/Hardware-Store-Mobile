@@ -1,17 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import baseURL from '@assets/commons/baseurl'
-import { Box, Input, Select, Toast } from 'native-base'
+import { Box, Input, ScrollView, Select } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import TitleContainer from '@shared/Form/TitleContainer'
 import { Ionicons } from '@expo/vector-icons'
-import RNPickerSelect from 'react-native-picker-select';
 import EasyButton from '@shared/StyledComponents/EasyButton'
 import * as ImagePicker from 'expo-image-picker'
 import mime from "mime";
 import AuthGlobal from "@context/Store/AuthGlobal"
+import Toast from 'react-native-toast-message'
 
 const ProductForm = (props) => {
     const context = useContext(AuthGlobal)
@@ -21,34 +21,41 @@ const ProductForm = (props) => {
     const [variant, setVariant] = useState('Local')
     const [price, setPrice] = useState('')
     const [stock, setStock] = useState('')
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState([])
     const [user, setUser] = useState('')
     const [token, setToken] = useState('')
     const [mainImage, setMainImage] = useState('');
     const [error, setError] = useState('')
     const navigation = useNavigation()
-
-    console.log("user:", context.stateUser.userProfile._id)
-    AsyncStorage.getItem("jwt")
-    .then((res)=>
-    {
-        setToken(res)
+ console.log(image)
+    // console.log("user:", context.stateUser.userProfile._id)
+    useEffect(() => {
+        AsyncStorage.getItem("jwt")
+        .then((res)=>
+        {
+            setToken(res)
+        })
+        .catch((error) => console.log("Errors:", error))
     })
-    .catch((error) => console.log("Errors:", error))
+    
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 1
+            quality: 1,
         });
 
         if (!result.canceled) {
             console.log(result)
-            setMainImage(result.assets[0].uri);
-            setImage(result.assets[0].uri);
+            setMainImage(prevImages => [...prevImages, result.uri]);
+            setImage(prevImages => [...prevImages, result.uri]);
         }
+    }
+
+    const deleteImage = (index) => {
+        setImage(prevImages => prevImages.filter((_, i) => i !== index));
     }
 
     const config = {
@@ -60,13 +67,13 @@ const ProductForm = (props) => {
 
     const addProduct = () =>
     {
-        if ( productName === "" || type === "" || classes === "" || variant === "" || price === "" || stock === "" )
+        if ( productName === "" || type === "" || classes === "" || variant === "" || price === "" || stock === "" || image.length === 0)
         {
             setError(" Fill in all fields ")
         }
 
         let formData = new FormData()
-        const newImageUri = "file:///" + image.split("file:/").join("");
+        // const newImageUri = "file:///" + image.split("file:/").join("");
         
         formData.append("user", context.stateUser.userProfile._id);
         formData.append("product_name", productName)
@@ -75,10 +82,13 @@ const ProductForm = (props) => {
         formData.append("variant", variant)
         formData.append("price", price)
         formData.append("stock", stock)
-        formData.append("image", {
-            uri: newImageUri,
-            type: mime.getType(newImageUri),
-            name: newImageUri.split("/").pop()
+        image.forEach((imageUri) => {
+            const newImageUri = "file:///" + imageUri.split("file:/").join("");
+            formData.append("image", {
+                uri: newImageUri,
+                type: mime.getType(newImageUri),
+                name: newImageUri.split("/").pop(),
+            });
         });
 
         axios
@@ -112,16 +122,19 @@ const ProductForm = (props) => {
 
   return (
    <TitleContainer title="Add Product">
-        <View style={styles.imageContainer}>
-      
-        <Image style={styles.image} source={{ uri: mainImage }} />
-   
-            <TouchableOpacity
-              onPress={pickImage}
-              style={styles.imagePicker}>
-              <Ionicons style={{color: "white"}} name="camera-outline" /> 
+         <TouchableOpacity onPress={pickImage}>
+                <Text style={styles.selectImageButton}>Select Images</Text>
+            </TouchableOpacity>
+            <ScrollView horizontal>
+               {image.map((imageUri, index) => (
+        <View key={index} >
+            <Image source={{ uri: imageUri }} style={styles.image} />
+            <TouchableOpacity onPress={() => deleteImage(index)} style={styles.deleteButton}>
+                <Ionicons name="close-outline" size={25} color="white" style={{ fontWeight: 'bold' }} />
             </TouchableOpacity>
         </View>
+    ))}
+            </ScrollView>
 
         <View style={styles.label}>
              <Text style={{ textDecorationLine: "underline"}}>Product Name</Text>
@@ -231,21 +244,11 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "white"
     },
-    imageContainer: {
-        width: 200,
-        height: 200,
-        borderStyle: "solid",
-        borderWidth: 8,
-        padding: 0,
-        justifyContent: "center",
-        borderRadius: 100,
-        borderColor: "#E0E0E0",
-        elevation: 10
-    },
     image: {
-        width: "100%",
-        height: "100%",
-        borderRadius: 100
+        width: 100,
+        height: 100,
+        marginHorizontal: 5,
+        borderRadius: 5,
     },
     imagePicker: {
         position: "absolute",
@@ -262,6 +265,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         width: '80%',
+    },selectImageButton: {
+        fontSize: 16,
+        color: 'blue',
+        textDecorationLine: 'underline',
+        marginBottom: 10,
+    },deleteButton: {
+        position: 'absolute',
+        top: 5,
+        right: 10,
+        backgroundColor: 'transparent',
     },
 
 })

@@ -100,6 +100,7 @@ const UserProfile = () => {
              <Image
                style={styles.avatar}
                source={{ uri: userProfile ? userProfile.details.image[0].url  : "" }}
+               accessibilityLabel={userProfile ? "User Profile Image" : "No Image Available"}
              />
              <TouchableOpacity 
              onPress={() => navigation.navigate("Edit User")}
