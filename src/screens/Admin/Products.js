@@ -1,8 +1,8 @@
-import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, RefreshControl } from 'react-native'
+import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, RefreshControl} from 'react-native'
 import React, { useCallback, useState } from 'react'
 import axios from 'axios'
 import baseURL from '@assets/commons/baseurl'
-import { useFocusEffect } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import EasyButton from '@shared/StyledComponents/EasyButton'
 import { Searchbar } from 'react-native-paper';
@@ -18,6 +18,7 @@ const Products = (props) => {
     const [productFilter, setProductFilter] = useState([])
     const [token, setToken] = useState('')
     const [refreshing, setRefreshing] = useState(false)
+    const navigation = useNavigation()
 
     console.log("hello",productsList)
     const ListHeader = () => {

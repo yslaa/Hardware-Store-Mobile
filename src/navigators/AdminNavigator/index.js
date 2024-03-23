@@ -1,5 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import Products from '@screens/Admin/Products'
+import ProductForm from '@screens/Admin/ProductForm'
 import React from 'react'
 
 const Stack = createStackNavigator()
@@ -13,6 +14,7 @@ const Index = () => {
             title: "Products"
         }}
         />
+        <Stack.Screen name="ProductForm" component={ProductForm}/>
     </Stack.Navigator>
   )
 }
