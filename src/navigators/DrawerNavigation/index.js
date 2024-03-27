@@ -21,7 +21,7 @@ const getIcon = (screenName) => {
         return "home-outline";
       case "Products":
         return "send";
-      case "Login":
+      case "User Profile":
         return "person-circle-outline";
         case "Cart":
         return "cart-outline";
@@ -31,6 +31,8 @@ const getIcon = (screenName) => {
         return "trash-can";
       case "Spam":
         return "alert-circle";
+        case "Brands":
+        return "briefcase-outline";
       default:
         return undefined;
     }
@@ -86,49 +88,6 @@ const getIcon = (screenName) => {
                 </Pressable>
               ))}
             </VStack>
-            <VStack space="5">
-              <Text fontWeight="500" fontSize="14" px="5" color="gray.500">
-                Labels
-              </Text>
-              <VStack space="3">
-                <Pressable px="5" py="3">
-                  <HStack space="7" alignItems="center">
-                    <Icon
-                      color="gray.500"
-                      size="5"
-                      as={<MaterialCommunityIcons name="bookmark" />}
-                    />
-                    <Text color="gray.700" fontWeight="500">
-                      Family
-                    </Text>
-                  </HStack>
-                </Pressable>
-                <Pressable px="5" py="2">
-                  <HStack space="7" alignItems="center">
-                    <Icon
-                      color="gray.500"
-                      size="5"
-                      as={<MaterialCommunityIcons name="bookmark" />}
-                    />
-                    <Text color="gray.700" fontWeight="500">
-                      Friends
-                    </Text>
-                  </HStack>
-                </Pressable>
-                <Pressable px="5" py="3">
-                  <HStack space="7" alignItems="center">
-                    <Icon
-                      color="gray.500"
-                      size="5"
-                      as={<MaterialCommunityIcons name="bookmark" />}
-                    />
-                    <Text fontWeight="500" color="gray.700">
-                      Work
-                    </Text>
-                  </HStack>
-                </Pressable>
-              </VStack>
-            </VStack>
           </VStack>
         </VStack>
       </DrawerContentScrollView>
@@ -177,9 +136,10 @@ const Index = () => {
         component={Main}
       />
       <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
-      <Drawer.Screen name="Login" component={Main} initialParams={{ screen: 'User' }} />
-       <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} />
+      <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
+      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} />
       <Drawer.Screen name="Product List" component={Main}  initialParams={{ screen: 'Admin' }}/>
+      <Drawer.Screen name="Brands" component={Main}  initialParams={{ screen: 'Admin' }}/>
 
     </Drawer.Navigator>
   </Box>
