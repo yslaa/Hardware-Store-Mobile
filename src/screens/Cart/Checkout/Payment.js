@@ -34,13 +34,32 @@ const paymentCards = [
     { name: 'Other', value: 4 }
 ]
 
-const Payment = ({ route }) => {
-
-    const order = route.params;
+const Payment = (props) => {
+    const { route } = props;
+    const { params: order } = route;
     const [selected, setSelected] = useState('');
     const [card, setCard] = useState('');
     console.log(order)
     const navigation = useNavigation()
+
+    const pay = () => {
+
+        const orders = {
+            ...order,
+            selected,
+            card
+        }
+        
+          // Check if required shipping information is present
+          if (!orders) {
+            alert("Pass the order!");
+            return;
+          }
+
+          console.log("order to confirm:", orders); // Add debug log
+          navigation.navigate("Confirm", { orders });
+    }
+
     return (
         <Center  >
             <Heading>
@@ -103,7 +122,7 @@ const Payment = ({ route }) => {
             <View style={{ marginTop: 60, alignSelf: 'center' }}>
                 <Button
                     title={"Confirm"}
-                    onPress={() => navigation.navigate("Confirm", { order: order })} />
+                    onPress={() => pay()} />
             </View>
         </Center>
     )
