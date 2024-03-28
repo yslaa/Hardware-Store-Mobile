@@ -1,5 +1,5 @@
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer'
-import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon} from "native-base";
+import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon, Avatar} from "native-base";
 import React, { useContext } from 'react'
 import 'react-native-gesture-handler';
 import ProductContainer from '@screens/Product/ProductContainer';
@@ -42,17 +42,25 @@ const getIcon = (screenName) => {
  
 
   function CustomDrawerContent(props) {
+    const context = useContext(AuthGlobal)
+    // console.log(context.stateUser.userProfile.email);
     return (
       <DrawerContentScrollView {...props} safeArea>
         <VStack space="6" my="2" mx="1">
-          <Box px="4">
-            <Text bold color="gray.700">
-              Mail
-            </Text>
-            <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-              john_doe@gmail.com
-            </Text>
-          </Box>
+<Box px="4">
+<HStack space="4" alignItems="center">
+  <Avatar source={{ uri: context.stateUser.userProfile && context.stateUser.userProfile.image && context.stateUser.userProfile.image[0].url }} size="md" />
+  <VStack alignItems="flex-start">
+    <Text bold color="gray.700">
+    {context.stateUser && context.stateUser.userProfile && context.stateUser.userProfile.name ? context.stateUser.userProfile.name : ""}
+    </Text>
+    <Text fontSize="14" color="gray.500" fontWeight="500">
+      {context.stateUser && context.stateUser.userProfile && context.stateUser.userProfile.email ? context.stateUser.userProfile.email : ""}
+    </Text>
+  </VStack>
+</HStack>
+
+</Box>
           <VStack divider={<Divider />} space="4">
             <VStack space="3">
               {props.state.routeNames.map((name, index) => (
