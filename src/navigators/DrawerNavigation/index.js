@@ -1,6 +1,6 @@
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer'
 import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon} from "native-base";
-import React from 'react'
+import React, { useContext } from 'react'
 import 'react-native-gesture-handler';
 import ProductContainer from '@screens/Product/ProductContainer';
 import Login from '@screens/User/Login';
@@ -11,6 +11,7 @@ import ProductList from '@screens/Product/ProductList';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from '@react-navigation/native';
 import { Alert, BackHandler } from 'react-native';
+import AuthGlobal from '@context/Store/AuthGlobal';
 
 global.__reanimatedWorkletInit = () => { };
 const Drawer = createDrawerNavigator()
@@ -20,7 +21,7 @@ const getIcon = (screenName) => {
       case "Home":
         return "home-outline";
       case "Products":
-        return "send";
+        return "cube-outline";
       case "User Profile":
         return "person-circle-outline";
         case "Cart":
@@ -95,7 +96,9 @@ const getIcon = (screenName) => {
   }
   
 const Index = () => {
-  
+  const context = useContext(AuthGlobal)
+
+  // console.log(context.stateUser.user.UserInfo.roles.includes("Customer"));
   const handleBackPress = () => {
     Alert.alert("Exit App", "Exiting the application?",[
       {
@@ -127,6 +130,7 @@ const Index = () => {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
+
       <Drawer.Screen
         name="Home"
         options={{
@@ -135,12 +139,19 @@ const Index = () => {
         }}
         component={Main}
       />
-      <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
+       {context.stateUser && context.stateUser.user && context.stateUser.user.UserInfo && context.stateUser.user.UserInfo.roles && context.stateUser.user.UserInfo.roles.includes("Admin") ? (
+      <>
+      <Drawer.Screen name="Product List" component={Main} initialParams={{ screen: 'Admin' }} />
+     <Drawer.Screen name="Brands" component={Main} initialParams={{ screen: 'Brand' }} /> 
+     <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
+      </>
+      ) : (
+        <>
+    <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
+      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} /> 
       <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
-      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} />
-      <Drawer.Screen name="Product List" component={Main}  initialParams={{ screen: 'Admin' }}/>
-      <Drawer.Screen name="Brands" component={Main}  initialParams={{ screen: 'Admin' }}/>
-
+     </>
+      )}
     </Drawer.Navigator>
   </Box>
   )
