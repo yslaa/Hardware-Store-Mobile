@@ -15,8 +15,8 @@ const countries = require("../../../../assets/data/countries.json");
 
 const Checkout = (props) => {
     const [user, setUser] = useState('')
-    const [orderItems, setOrderItems] = useState([])
-    const [address, setAddress] = useState('')
+    // const [orderItems, setOrderItems] = useState([])
+    const [address1, setAddress1] = useState('')
     const [address2, setAddress2] = useState('')
     const [city, setCity] = useState('')
     const [zip, setZip] = useState('')
@@ -24,13 +24,14 @@ const Checkout = (props) => {
     const [phone, setPhone] = useState('')
 
     const navigation = useNavigation()
-    const cartItems = useSelector(state => state.cartItems)
+    // const cartItems = useSelector(state => state.cartItems)
     const context = useContext(AuthGlobal);
 
     useEffect(() => {
-        setOrderItems(cartItems)
+        // setOrderItems(cartItems)
+        // console.log(context.stateUser.userProfile)
         if(context.stateUser.isAuthenticated) {
-            setUser(context.stateUser.user.userId)
+            setUser(context.stateUser.userProfile._id)
         } else {
             navigation.navigate("User",{ screen: 'Login' });
             Toast.show({
@@ -40,29 +41,37 @@ const Checkout = (props) => {
                 text2: ""
             });
         }
-        return () => {
-            setOrderItems();
-        }
+        return
     }, [])
 
     const checkOut = () => {
-        console.log("orders", orderItems)
-        let order = {
-            city,
-            country,
-            dateOrdered: Date.now(),
-            orderItems,
-            phone,
-            shippingAddress1: address,
-            shippingAddress2: address2,
-            status: "3",
+        // console.log("orders", orderItems)
+        const order = {
             user,
-            zip,
-        }
-        console.log("ship", order)
-        navigation.navigate("Payment", { order: order })
+            dateOrdered: Date.now(),
+            status: "1",
+            // orderItems,
+            shippingInfo: {
+              address1,
+              address2,
+              city,
+              phone,
+              zip,
+              country,
+            },
+          };
+          
+          // Check if required shipping information is present
+          if (!address1 || !address2 || !city || !zip) {
+            alert("Please fill in all required shipping information!");
+            return;
+          }
+          
+          console.log("order to be paid:", order); // Add debug log
+          navigation.navigate("Payment", { order });
+
     }
-    console.log(orderItems)
+
     return (
 
         <KeyboardAwareScrollView
@@ -81,8 +90,8 @@ const Checkout = (props) => {
                 <Input
                     placeholder={"Shipping Address 1"}
                     name={"ShippingAddress1"}
-                    value={address}
-                    onChangeText={(text) => setAddress(text)}
+                    value={address1}
+                    onChangeText={(text) => setAddress1(text)}
                 />
                 <Input
                     placeholder={"Shipping Address 2"}
