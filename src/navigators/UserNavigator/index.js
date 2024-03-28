@@ -6,6 +6,7 @@ import Register from '@screens/User/Register';
 import Login from '@screens/User/Login';
 import UserProfile from '@screens/User/UserProfile';
 import UserEdit from '@screens/User/UserEdit'
+import UserWishlist from '@screens/User/WishlistList'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserNavigation = (props) => {
@@ -38,6 +39,13 @@ const UserNavigation = (props) => {
                 <Stack.Screen
                     name='Edit User'
                     component={UserEdit}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Stack.Screen
+                    name='User Wishlist'
+                    component={UserWishlist}
                     options={{
                         headerShown: false
                     }}

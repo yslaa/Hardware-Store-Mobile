@@ -9,6 +9,7 @@ import AuthGlobal from "@context/Store/AuthGlobal"
 import { logoutUser } from "@context/Actions/Auth.actions"
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
+import EasyButton from '@shared/StyledComponents/EasyButton';
 // import OrderCard from '../../Shared/OrderCard';
 
 
@@ -115,7 +116,13 @@ const UserProfile = () => {
                         logoutUser(context.dispatch)
                     ]} />
          </View>
-        
+         <EasyButton
+                    secondary
+                    medium
+                    onPress={() => navigation.navigate("User Wishlist")}>
+                    <Ionicons name="heart" size={18} color="white" />
+                    <Text style={styles.buttonText}> My Wishlist</Text>
+            </EasyButton>
         
    
         
