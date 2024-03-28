@@ -10,7 +10,7 @@ const index = () => {
         name="Brand" 
         component={Brand}
         options={{
-            title: "Products"
+            title: "Brand"
         }}
         />
     </Stack.Navigator>
