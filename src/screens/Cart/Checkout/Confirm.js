@@ -29,6 +29,11 @@ const Confirm = (props) => {
     const totalPrice = (itemsPrice + shippingPrice).toFixed(2);
 
     useEffect(() => {
+        AsyncStorage.getItem("jwt")
+        .then((res) => {
+            setToken(res)
+        })
+        .catch((error) => console.log(error))
         const reducedOrderItems = cartItems.map((item) => ({
             product_name: item.product_name,
             class: item.class,
@@ -47,7 +52,7 @@ const Confirm = (props) => {
 
     const confirmOrder = () => {
         const orders = finalOrder.orders.order;
-        const payment = finalOrder.orders.payment;
+        const payment = JSON.stringify(finalOrder.orders.payment);
 
         const order = {
             ...orders,
@@ -58,11 +63,6 @@ const Confirm = (props) => {
             totalPrice
         }
         console.log(order)
-        AsyncStorage.getItem("jwt")
-            .then((res) => {
-                setToken(res)
-            })
-            .catch((error) => console.log(error))
 
         const config = {
             headers: {
@@ -94,7 +94,8 @@ const Confirm = (props) => {
                     text1: "Something went wrong",
                     text2: "Please try again",
                 });
-                console.log(error)
+                console.log("Error:", error);
+                console.log("Error Response:", error.response.data); 
             });
     }
     return (

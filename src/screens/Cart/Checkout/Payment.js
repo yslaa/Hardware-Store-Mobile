@@ -47,7 +47,7 @@ const Payment = (props) => {
         const orders = {
             ...order,
             payment: {
-                values: selected,
+                value: selected,
                 card
             }
         }
@@ -96,7 +96,7 @@ const Payment = (props) => {
                     }
                 </Radio.Group>
             </HStack>
-            {selected === 3 ? (
+            {selected === "Card Payment" ? (
                 <Box>
                     <Select
                         minWidth="100%"
