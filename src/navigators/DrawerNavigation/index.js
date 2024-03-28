@@ -1,6 +1,6 @@
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer'
-import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon} from "native-base";
-import React from 'react'
+import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon, Avatar} from "native-base";
+import React, { useContext } from 'react'
 import 'react-native-gesture-handler';
 import ProductContainer from '@screens/Product/ProductContainer';
 import Login from '@screens/User/Login';
@@ -11,6 +11,7 @@ import ProductList from '@screens/Product/ProductList';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from '@react-navigation/native';
 import { Alert, BackHandler } from 'react-native';
+import AuthGlobal from '@context/Store/AuthGlobal';
 
 global.__reanimatedWorkletInit = () => { };
 const Drawer = createDrawerNavigator()
@@ -20,7 +21,7 @@ const getIcon = (screenName) => {
       case "Home":
         return "home-outline";
       case "Products":
-        return "send";
+        return "cube-outline";
       case "User Profile":
         return "person-circle-outline";
         case "Cart":
@@ -41,17 +42,25 @@ const getIcon = (screenName) => {
  
 
   function CustomDrawerContent(props) {
+    const context = useContext(AuthGlobal)
+    // console.log(context.stateUser.userProfile.email);
     return (
       <DrawerContentScrollView {...props} safeArea>
         <VStack space="6" my="2" mx="1">
-          <Box px="4">
-            <Text bold color="gray.700">
-              Mail
-            </Text>
-            <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-              john_doe@gmail.com
-            </Text>
-          </Box>
+<Box px="4">
+<HStack space="4" alignItems="center">
+  <Avatar source={{ uri: context.stateUser.userProfile && context.stateUser.userProfile.image && context.stateUser.userProfile.image[0].url }} size="md" />
+  <VStack alignItems="flex-start">
+    <Text bold color="gray.700">
+    {context.stateUser && context.stateUser.userProfile && context.stateUser.userProfile.name ? context.stateUser.userProfile.name : ""}
+    </Text>
+    <Text fontSize="14" color="gray.500" fontWeight="500">
+      {context.stateUser && context.stateUser.userProfile && context.stateUser.userProfile.email ? context.stateUser.userProfile.email : ""}
+    </Text>
+  </VStack>
+</HStack>
+
+</Box>
           <VStack divider={<Divider />} space="4">
             <VStack space="3">
               {props.state.routeNames.map((name, index) => (
@@ -95,7 +104,9 @@ const getIcon = (screenName) => {
   }
   
 const Index = () => {
-  
+  const context = useContext(AuthGlobal)
+
+  // console.log(context.stateUser.user.UserInfo.roles.includes("Customer"));
   const handleBackPress = () => {
     Alert.alert("Exit App", "Exiting the application?",[
       {
@@ -127,6 +138,7 @@ const Index = () => {
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
+
       <Drawer.Screen
         name="Home"
         options={{
@@ -135,12 +147,19 @@ const Index = () => {
         }}
         component={Main}
       />
-      <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
+       {context.stateUser && context.stateUser.user && context.stateUser.user.UserInfo && context.stateUser.user.UserInfo.roles && context.stateUser.user.UserInfo.roles.includes("Admin") ? (
+      <>
+      <Drawer.Screen name="Product List" component={Main} initialParams={{ screen: 'Admin' }} />
+     <Drawer.Screen name="Brands" component={Main} initialParams={{ screen: 'Brand' }} /> 
+     <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
+      </>
+      ) : (
+        <>
+    <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
+      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} /> 
       <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
-      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} />
-      <Drawer.Screen name="Product List" component={Main}  initialParams={{ screen: 'Admin' }}/>
-      <Drawer.Screen name="Brands" component={Main}  initialParams={{ screen: 'Admin' }}/>
-
+     </>
+      )}
     </Drawer.Navigator>
   </Box>
   )
