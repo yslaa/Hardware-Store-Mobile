@@ -49,7 +49,7 @@ const Checkout = (props) => {
         const order = {
             user,
             dateOrdered: Date.now(),
-            status: "1",
+            status: "Pending",
             // orderItems,
             shippingInfo: {
               address1,
@@ -62,7 +62,7 @@ const Checkout = (props) => {
           };
           
           // Check if required shipping information is present
-          if (!address1 || !address2 || !city || !zip) {
+          if (!order) {
             alert("Please fill in all required shipping information!");
             return;
           }

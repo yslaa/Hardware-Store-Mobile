@@ -46,8 +46,10 @@ const Payment = (props) => {
 
         const orders = {
             ...order,
-            selected,
-            card
+            payment: {
+                values: selected,
+                card
+            }
         }
         
           // Check if required shipping information is present
@@ -80,7 +82,7 @@ const Payment = (props) => {
                         return (
                             <Radio
                                 key={index}
-                                value={item.value} my="1"
+                                value={item.name} my="1"
                                 colorScheme="green"
                                 size="22"
                                 style={{ float: 'right' }}

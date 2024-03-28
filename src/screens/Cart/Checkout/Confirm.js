@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Dimensions, ScrollView, Button } from "react-native";
 import { Text, HStack, VStack, Avatar, Spacer, Center } from "native-base";
 
@@ -15,29 +15,63 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 var { width, height } = Dimensions.get("window");
 
 const Confirm = (props) => {
+    const [orderItems, setOrderItems] = useState([])
     const [token, setToken] = useState();
-    // const confirm = props.route.params;
     const finalOrder = props.route.params;
-    console.log("order", finalOrder)
+    console.log("Transaction", finalOrder)
+
     const dispatch = useDispatch()
     let navigation = useNavigation()
+    
+    const cartItems = useSelector(state => state.cartItems)
+    const shippingPrice = cartItems.price > 100 ? 0 : 15;
+    const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const totalPrice = (itemsPrice + shippingPrice).toFixed(2);
+
+    useEffect(() => {
+        const reducedOrderItems = cartItems.map((item) => ({
+            product_name: item.product_name,
+            class: item.class,
+            productType: item.type,
+            variant: item.variant,
+            quantity: item.quantity,
+            image: item.image,
+            price: item.price,
+            productId: item._id,
+        }));
+        setOrderItems(reducedOrderItems);
+        return () => {
+            setOrderItems();
+        }
+    }, [])
 
     const confirmOrder = () => {
-        const order = finalOrder.order.order;
+        const orders = finalOrder.orders.order;
+        const payment = finalOrder.orders.payment;
 
+        const order = {
+            ...orders,
+            payment,
+            orderItems,
+            shippingPrice,
+            itemsPrice,
+            totalPrice
+        }
+        console.log(order)
         AsyncStorage.getItem("jwt")
             .then((res) => {
                 setToken(res)
-
             })
             .catch((error) => console.log(error))
+
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         }
+
         axios
-            .post(`${baseURL}orders`, order, config)
+            .post(`${baseURL}transactions`, order, config)
             .then((res) => {
                 if (res.status == 200 || res.status == 201) {
                     Toast.show({
@@ -46,8 +80,6 @@ const Confirm = (props) => {
                         text1: "Order Completed",
                         text2: "",
                     });
-                    // dispatch(clearCart())
-                    // navigation.navigate("Cart")
 
                     setTimeout(() => {
                         dispatch(clearCart())
@@ -62,6 +94,7 @@ const Confirm = (props) => {
                     text1: "Something went wrong",
                     text2: "Please try again",
                 });
+                console.log(error)
             });
     }
     return (
@@ -72,36 +105,40 @@ const Confirm = (props) => {
                     {props.route.params ? (
                         <View style={{ borderWidth: 1, borderColor: "orange" }}>
                             <Text style={styles.title}>Shipping to:</Text>
-                            <View style={{ padding: 8 }}>
-                                <Text>Address: {finalOrder.order.order.shippingAddress1}</Text>
-                                <Text>Address2: {finalOrder.order.order.shippingAddress2}</Text>
-                                <Text>City: {finalOrder.order.order.city}</Text>
-                                <Text>Zip Code: {finalOrder.order.order.zip}</Text>
-                                <Text>Country: {finalOrder.order.order.country}</Text>
+                            <View style={{ padding: 15 }}>
+                                <Text>Address: {finalOrder.orders.order.shippingInfo.address1}</Text>
+                                <Text>Address2: {finalOrder.orders.order.shippingInfo.address2}</Text>
+                                <Text>City: {finalOrder.orders.order.shippingInfo.city}</Text>
+                                <Text>Zip Code: {finalOrder.orders.order.shippingInfo.zip}</Text>
+                                <Text>Country: {finalOrder.orders.order.shippingInfo.country}</Text>
                             </View>
                             <Text style={styles.title}>items</Text>
-
-                            {finalOrder.order.order.orderItems.map((item) => {
+                            
+                            {orderItems.map((item) => {
                                 return (
-                                    <HStack space={[2, 3]} justifyContent="space-between" key={item.id}>
+                                    <HStack space={[8, 3]} justifyContent="space-between" key={item._id}>
                                         <Avatar size="48px" source={{
-                                            uri: item.image ?
-                                                item.image : 'https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png'
+                                            uri: item.image[0].url
                                         }}
                                         />
                                         <VStack>
                                             <Text _dark={{
                                                 color: "warmGray.50"
                                             }} color="coolGray.800" bold>
-                                                {item.name}
+                                                {item.product_name}
                                             </Text>
-
                                         </VStack>
+                                        <Spacer />
+                                        <Text color="coolGray.800" _dark={{
+                                            color: 'warmGray.50'
+                                        }} marginleft="2">
+                                            Qty: {item.quantity}
+                                        </Text>
                                         <Spacer />
                                         <Text fontSize="xs" _dark={{
                                             color: "warmGray.50"
                                         }} color="coolGray.800" alignSelf="flex-start">
-                                            {item.price}
+                                        $ {item.price}
                                         </Text>
                                     </HStack>
                                 )
