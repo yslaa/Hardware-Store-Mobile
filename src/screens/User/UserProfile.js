@@ -116,6 +116,8 @@ const UserProfile = () => {
                         logoutUser(context.dispatch)
                     ]} />
          </View>
+         {context.stateUser && context.stateUser.user && context.stateUser.user.UserInfo && context.stateUser.user.UserInfo.roles && context.stateUser.user.UserInfo.roles.includes("Customer") && (  
+         <>
          <EasyButton
                     secondary
                     medium
@@ -123,7 +125,8 @@ const UserProfile = () => {
                     <Ionicons name="heart" size={18} color="white" />
                     <Text style={styles.buttonText}> My Wishlist</Text>
             </EasyButton>
-        
+            </>
+        )}
    
         
        </View>

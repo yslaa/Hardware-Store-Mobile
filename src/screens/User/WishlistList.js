@@ -36,13 +36,22 @@ const ListItem = () => {
 
     useEffect(() => {
         if (products.details && products.details.length > 0) {
-            const userWishlist = products.details.flatMap(product => product.wishlist.map(item => ({ ...item, productId: product._id, productName: product.product_name, productImage: product.image[0].url })));
+            const loggedInUserId = context.stateUser.userProfile._id;
+            const userWishlist = products.details.flatMap(product =>
+                product.wishlist.filter(item => item.user === loggedInUserId)
+                                 .map(item => ({
+                                     ...item,
+                                     productId: product._id,
+                                     productName: product.product_name,
+                                     productImage: product.image[0].url
+                                 }))
+            );
             console.log(userWishlist);
             setWishList(userWishlist);
         } else {
             setWishList([]);
         }
-    }, [products]);
+    }, [products, context.stateUser.userProfile._id]);
 
     useFocusEffect(
         useCallback(
