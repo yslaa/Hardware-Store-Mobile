@@ -103,7 +103,7 @@ const ListItem = ({ item, index, deleteProduct }) => {
                 <Text style={styles.item} numberOfLines={1} ellipsizeMode="tail">
                     {item.stock }
                 </Text>
-                <Text style={styles.item}>{item.brand}</Text>
+                <Text style={styles.item}></Text>
                 <Text style={styles.item}>$ {item.price}</Text>
             </TouchableOpacity>
         </View>

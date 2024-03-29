@@ -164,17 +164,28 @@ const ProductUpdate = (props) => {
        onChangeText={(text) => setProductName(text)}
        />
 
-    <View style={styles.label}>
-         <Text style={{ textDecorationLine: "underline"}}>Type</Text>
-    </View>
-    <Input 
-       placeholder='Type'
-       name='type'
-       id='type'
-       value={type}
-       minWidth="90%"
-       onChangeText={(text) => setType(text)}
-       />
+<View style={styles.label}>
+    <Text style={{ textDecorationLine: "underline"}}>Type</Text>
+</View>
+
+<Box>
+            <Select
+                minWidth="90%"
+                placeholder="Select your Type"
+                selectedValue={type}
+                onValueChange={(value) => setType(value)}
+            >
+                <Select.Item label="Door Accessories" value="Door Accessories" />
+                <Select.Item label="Machinery Equipment" value="Machinery Equipment" />
+                <Select.Item label="Hand Tools" value="Hand Tools" />
+                <Select.Item label="Safety and Security" value="Safety and Security" />
+                <Select.Item label="Power Tools" value="Power Tools" />
+                <Select.Item label="Painting" value="Painting" />
+                <Select.Item label="Electrical" value="Electrical" />
+                <Select.Item label="Lighting" value="Lighting" />
+                <Select.Item label="Building Materials" value="Building Materials" />
+            </Select>
+        </Box>
 
  
 
@@ -191,21 +202,6 @@ const ProductUpdate = (props) => {
        />
     
 
-    <View style={styles.label}>
-<Text style={{ textDecorationLine: "underline"}}>Variant</Text>
-</View>
-
-<Box>
-        <Select
-            minWidth="90%"
-            placeholder="Select your Variant"
-            selectedValue={variant}
-            onValueChange={(value) => setVariant(value)}
-        >
-            <Select.Item label="Local" value="Local" />
-            <Select.Item label="International" value="International" />
-        </Select>
-    </Box>
    
     <View style={styles.label}>
         <Text style={{ textDecorationLine: "underline"}}>Price</Text>

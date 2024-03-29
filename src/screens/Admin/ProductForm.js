@@ -26,9 +26,13 @@ const ProductForm = (props) => {
     const [token, setToken] = useState('')
     const [mainImage, setMainImage] = useState('');
     const [error, setError] = useState('')
+    const [brands, setBrands] = useState([])
+    const [pickerValues, setPickerValues] = useState('')
     const navigation = useNavigation()
  console.log(image)
+//  console.log(brands.details.brand_name)
     // console.log("user:", context.stateUser.userProfile._id)
+    console.log(pickerValues)
     useEffect(() => {
         AsyncStorage.getItem("jwt")
         .then((res)=>
@@ -38,6 +42,25 @@ const ProductForm = (props) => {
         .catch((error) => console.log("Errors:", error))
     })
     
+    useEffect(() => {
+                AsyncStorage.getItem("jwt")
+                    .then((res) => {
+                        setToken(res)
+                        axios
+                            .get(`${baseURL}brands`, {
+                                headers: { Authorization: `Bearer ${res}` }
+                            })
+                            .then((res) => {
+                                console.log(res.data)
+                                setBrands(res.data);
+                                setLoading(false);
+                            })
+                            .catch((error) => console.log(error));
+                    })
+                    .catch((error) => console.log(error))
+            },
+            [],
+        )
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -67,7 +90,7 @@ const ProductForm = (props) => {
 
     const addProduct = () =>
     {
-        if ( productName === "" || type === "" || classes === "" || variant === "" || price === "" || stock === "" || image.length === 0)
+        if ( productName === "" || type === "" || brands === "" || classes === "" || price === "" || stock === "" || image.length === 0)
         {
             setError(" Fill in all fields ")
         }
@@ -78,8 +101,8 @@ const ProductForm = (props) => {
         formData.append("user", context.stateUser.userProfile._id);
         formData.append("product_name", productName)
         formData.append("type", type)
+        formData.append("brand", pickerValues)
         formData.append("class", classes)
-        formData.append("variant", variant)
         formData.append("price", price)
         formData.append("stock", stock)
         image.forEach((imageUri) => {
@@ -148,19 +171,51 @@ const ProductForm = (props) => {
            onChangeText={(text) => setProductName(text)}
            />
 
-        <View style={styles.label}>
-             <Text style={{ textDecorationLine: "underline"}}>Type</Text>
-        </View>
-        <Input 
-           placeholder='Type'
-           name='type'
-           id='type'
-           value={type}
-           minWidth="90%"
-           onChangeText={(text) => setType(text)}
-           />
+<View style={styles.label}>
+    <Text style={{ textDecorationLine: "underline"}}>Type</Text>
+</View>
 
-     
+<Box>
+            <Select
+                minWidth="90%"
+                placeholder="Select your Variant"
+                selectedValue={type}
+                onValueChange={(value) => setType(value)}
+            >
+                <Select.Item label="Door Accessories" value="Door Accessories" />
+                <Select.Item label="Machinery Equipment" value="Machinery Equipment" />
+                <Select.Item label="Hand Tools" value="Hand Tools" />
+                <Select.Item label="Safety and Security" value="Safety and Security" />
+                <Select.Item label="Power Tools" value="Power Tools" />
+                <Select.Item label="Painting" value="Painting" />
+                <Select.Item label="Electrical" value="Electrical" />
+                <Select.Item label="Lighting" value="Lighting" />
+                <Select.Item label="Building Materials" value="Building Materials" />
+            </Select>
+        </Box>
+
+        <View style={styles.label}>
+    <Text style={{ textDecorationLine: "underline"}}>Brand</Text>
+</View>
+
+<Box>
+            <Select
+                minWidth="90%"
+                placeholder="Select your Brand"
+                selectedValue={pickerValues}
+                onValueChange={(value) => setPickerValues(value)}
+            >
+                {brands && brands.details && brands.details.map((brand, index) => (
+               <Select.Item 
+               key={brand._id} 
+               label={brand.brand_name} 
+               value={brand._id} />
+                 ))}
+               
+               
+            </Select>
+        </Box>
+
 
         <View style={styles.label}>
             <Text style={{ textDecorationLine: "underline"}}>Class</Text>
@@ -175,21 +230,7 @@ const ProductForm = (props) => {
            />
         
 
-        <View style={styles.label}>
-    <Text style={{ textDecorationLine: "underline"}}>Variant</Text>
-</View>
-
-<Box>
-            <Select
-                minWidth="90%"
-                placeholder="Select your Variant"
-                selectedValue={variant}
-                onValueChange={(value) => setVariant(value)}
-            >
-                <Select.Item label="Local" value="Local" />
-                <Select.Item label="International" value="International" />
-            </Select>
-        </Box>
+       
        
         <View style={styles.label}>
             <Text style={{ textDecorationLine: "underline"}}>Price</Text>

@@ -20,7 +20,7 @@ const Products = (props) => {
     const [refreshing, setRefreshing] = useState(false)
     const navigation = useNavigation()
 
-    console.log("hello",productsList)
+    // console.log("hello",productsList)
     const ListHeader = () => {
         return (
             <View
@@ -53,6 +53,7 @@ const Products = (props) => {
         )
     }
 
+    console.log("productfil",productFilter)
     const deleteProduct = (id) =>
     {
         axios 
@@ -95,7 +96,7 @@ const Products = (props) => {
                 axios
                     .get(`${baseURL}products`)
                     .then((res) => {
-                        console.log(res.data)
+                        // console.log(res.data)
                         setProductsList(res.data);
                         setProductFilter(res.data);
                         setLoading(false);
