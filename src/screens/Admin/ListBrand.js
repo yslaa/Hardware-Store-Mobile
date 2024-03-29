@@ -100,11 +100,8 @@ const ListBrand = ({ item, index, deleteBrand }) => {
                 <Text style={styles.item} numberOfLines={1} ellipsizeMode="tail">
                     {item.brand_name }
                 </Text>
-                <Text style={styles.item} numberOfLines={1} ellipsizeMode="tail">
-                    {item.stock }
-                </Text>
                 <Text style={styles.item}>{item.brand}</Text>
-                <Text style={styles.item}>$ {item.price}</Text>
+                <Text style={styles.item}>{item.variant}</Text>
             </TouchableOpacity>
         </View>
     );
