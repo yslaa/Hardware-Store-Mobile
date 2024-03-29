@@ -80,14 +80,16 @@ const BrandUpdate = (props) => {
         let formData = new FormData();
         formData.append("brand_name", brandName);
         formData.append("variant", variant);
-        image.forEach((imageUri) => {
-            const newImageUri = "file:///" + imageUri.split("file:/").join("");
-            formData.append("image", {
-                uri: newImageUri,
-                type: mime.getType(newImageUri),
-                name: newImageUri.split("/").pop(),
+        if (image.length !== props.route.params.item.image.length) {
+            image.forEach((imageUri, index) => {
+                const newImageUri = "file:///" + imageUri.split("file:/").join("");
+                formData.append('image', {
+                    uri: newImageUri,
+                    type: mime.getType(newImageUri),
+                    name: `image_${index}.jpg`,
+                });
             });
-        });
+        }
 
         axios.patch(`${baseURL}brand/edit/${item._id}`, formData, config)
             .then((res) => {
@@ -98,7 +100,7 @@ const BrandUpdate = (props) => {
                         text1: "Brand Update Successfully"
                     })
                     setTimeout(() => {
-                        navigation.navigate("Brands")
+                        navigation.navigate("Brand")
                     }, 100)
                 }
             })

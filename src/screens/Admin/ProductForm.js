@@ -17,8 +17,6 @@ const ProductForm = (props) => {
     const context = useContext(AuthGlobal)
     const [productName, setProductName] = useState('')
     const [type, setType] = useState('')
-    const [classes, setClasses] = useState('')
-    const [variant, setVariant] = useState('Local')
     const [price, setPrice] = useState('')
     const [stock, setStock] = useState('')
     const [image, setImage] = useState([])
@@ -90,7 +88,7 @@ const ProductForm = (props) => {
 
     const addProduct = () =>
     {
-        if ( productName === "" || type === "" || brands === "" || classes === "" || price === "" || stock === "" || image.length === 0)
+        if ( productName === "" || type === "" || brands === "" || price === "" || stock === "" || image.length === 0)
         {
             setError(" Fill in all fields ")
         }
@@ -102,7 +100,6 @@ const ProductForm = (props) => {
         formData.append("product_name", productName)
         formData.append("type", type)
         formData.append("brand", pickerValues)
-        formData.append("class", classes)
         formData.append("price", price)
         formData.append("stock", stock)
         image.forEach((imageUri) => {
@@ -216,19 +213,6 @@ const ProductForm = (props) => {
             </Select>
         </Box>
 
-
-        <View style={styles.label}>
-            <Text style={{ textDecorationLine: "underline"}}>Class</Text>
-        </View>
-        <Input 
-           placeholder='Class'
-           name='classes'
-           id='classes'
-           value={classes}
-           minWidth="90%"
-           onChangeText={(text) => setClasses(text)}
-           />
-        
 
        
        

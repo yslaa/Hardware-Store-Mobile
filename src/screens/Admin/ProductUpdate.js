@@ -13,128 +13,120 @@ import mime from "mime";
 import { useNavigation } from '@react-navigation/native'
 
 const ProductUpdate = (props) => {
-    console.log("Update:",props.route.params.item._id)
-    const [productName, setProductName] = useState('')
-    const [type, setType] = useState('')
-    const [classes, setClasses] = useState('')
-    const [variant, setVariant] = useState('')
-    const [price, setPrice] = useState('')
-    const [stock, setStock] = useState('')
-    const [image, setImage] = useState([])
-    const [user, setUser] = useState('')
-    const [token, setToken] = useState('')
-    const [mainImage, setMainImage] = useState('');
-    const [error, setError] = useState('')
+    const navigation = useNavigation();
+    const [productName, setProductName] = useState('');
+    const [type, setType] = useState('');
+    const [price, setPrice] = useState('');
+    const [stock, setStock] = useState('');
+    const [image, setImage] = useState([]);
+    const [pickerValues, setPickerValues] = useState('');
+    const [brands, setBrands] = useState([]);
+    const [error, setError] = useState('');
     const [item, setItem] = useState(null);
-    const navigation = useNavigation()
-    // console.log(stock)
-    // console.log(price)
-    // console.log(variant)
-    // console.log(item)
-    // console.log("iamge:",image)
-    useEffect(() =>
-    {
-        
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
         setItem(props.route.params.item);
-        setProductName(props.route.params.item.product_name)
-        setType(props.route.params.item.type)
-        setClasses(props.route.params.item.class)
-        setPrice(props.route.params.item.price.toString())
-        setStock(props.route.params.item.stock.toString())
-        setVariant(props.route.params.item.variant)
+        setProductName(props.route.params.item.product_name);
+        setType(props.route.params.item.type);
+        setPrice(props.route.params.item.price.toString());
+        setStock(props.route.params.item.stock.toString());
+        setPickerValues(props.route.params.item.brand);
         const imageURLs = props.route.params.item.image.map(imageObj => imageObj.url);
         setImage(imageURLs);
-        
-        AsyncStorage.getItem("jwt")
-        .then((res)=>
-        {
-            setToken(res)
-        })
-        .catch((error) => console.log("Errors:", error))
-    },[])
+
+        AsyncStorage.getItem('jwt')
+            .then((res) => {
+                setToken(res);
+            })
+            .catch((error) => console.log('Errors:', error));
+    }, []);
+
+    useEffect(() => {
+        AsyncStorage.getItem('jwt')
+            .then((res) => {
+                setToken(res);
+                axios
+                    .get(`${baseURL}brands`, {
+                        headers: { Authorization: `Bearer ${res}` },
+                    })
+                    .then((res) => {
+                        setBrands(res.data);
+                    })
+                    .catch((error) => console.log(error));
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 1
+            quality: 1,
         });
 
-        if (!result.canceled) {
-            console.log(result)
-            setMainImage(prevImages => [...prevImages, result.uri]);
+        if (!result.cancelled) {
             setImage(prevImages => [...prevImages, result.uri]);
         }
-    }
+    };
 
     const deleteImage = (index) => {
         setImage(prevImages => prevImages.filter((_, i) => i !== index));
-    }
-
-    const config = {
-        headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`
-        }
-    }
+    };
 
     const updateProduct = () => {
-        if (productName === "" || type === "" || classes === "" || variant === "" || price === "" || stock === "") {
-            setError(" Fill in all fields ")
-            return; 
+        if (productName === '' || type === '' || pickerValues === '' || price === '' || stock === '') {
+            setError('Fill in all fields');
+            return;
         }
     
         let formData = new FormData();
-        formData.append("product_name", productName);
-        formData.append("type", type);
-        formData.append("class", classes);
-        formData.append("variant", variant);
-        formData.append("price", price);
-        formData.append("stock", stock);
-
-        // if (image && typeof image === 'string') {
-        //     const newImageUri = "file:///" + image.split("file:/").join("");
-        //     formData.append("image", {
-        //         uri: newImageUri,
-        //         type: mime.getType(newImageUri),
-        //         name: newImageUri.split("/").pop()
-        //     });
-        // }
-
-        image.forEach((imageUri) => {
-            const newImageUri = "file:///" + imageUri.split("file:/").join("");
-            formData.append("image", {
-                uri: newImageUri,
-                type: mime.getType(newImageUri),
-                name: newImageUri.split("/").pop(),
-            });
-        });
-
-        axios.patch(`${baseURL}product/edit/${item._id}`, formData, config)
-            .then((res) => {
-                if (res.status === 200 || res.status === 201) {
-                    Toast.show({
-                        topOffset: 60,
-                        type: "success",
-                        text1: "Product Update Successfully"
-                    })
-                    setTimeout(() => {
-                        navigation.navigate("Products")
-                    }, 100)
-                }
-            })
-            .catch((error) => {
-                console.log("Error:", error);
-                console.log("Error Response:", error.response.data);
-                Toast.show({
-                    topOffset: 60,
-                    type: "error",
-                    text1: "Something went wrong",
-                    text2: "Please try again"
+        formData.append("product_name", productName)
+        formData.append("type", type)
+        formData.append("brand", pickerValues)
+        formData.append("price", price)
+        formData.append("stock", stock)
+    
+        if (image.length !== props.route.params.item.image.length) {
+            image.forEach((imageUri, index) => {
+                const newImageUri = "file:///" + imageUri.split("file:/").join("");
+                formData.append('image', {
+                    uri: newImageUri,
+                    type: mime.getType(newImageUri),
+                    name: `image_${index}.jpg`,
                 });
             });
-    }
+        }
+    
+        axios.patch(`${baseURL}product/edit/${item._id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`,
+            },
+        })
+        .then((res) => {
+            if (res.status === 200 || res.status === 201) {
+                Toast.show({
+                    topOffset: 60,
+                    type: 'success',
+                    text1: 'Product Updated Successfully',
+                });
+                navigation.navigate('Products');
+            }
+        })
+        .catch((error) => {
+            console.log('Error:', error);
+            console.log('Error Response:', error.response.data);
+            Toast.show({
+                topOffset: 60,
+                type: 'error',
+                text1: 'Something went wrong',
+                text2: 'Please try again',
+            });
+        });
+    };
+
 
   return (
     <TitleContainer title="Add Product">
@@ -187,22 +179,28 @@ const ProductUpdate = (props) => {
             </Select>
         </Box>
 
- 
 
-    <View style={styles.label}>
-        <Text style={{ textDecorationLine: "underline"}}>Class</Text>
-    </View>
-    <Input 
-       placeholder='Class'
-       name='classes'
-       id='classes'
-       value={classes}
-       minWidth="90%"
-       onChangeText={(text) => setClasses(text)}
-       />
-    
+        <View style={styles.label}>
+    <Text style={{ textDecorationLine: "underline" }}>Brand</Text>
+</View>
 
-   
+<Box>
+    <Select
+        minWidth="90%"
+        placeholder="Select your Brand"
+        selectedValue={pickerValues}
+        onValueChange={(value) => setPickerValues(value)}
+    >
+        {brands && brands.details && brands.details.map((brand) => (
+            <Select.Item 
+                key={brand._id} 
+                label={brand.brand_name} 
+                value={brand._id} 
+            />
+        ))}
+    </Select>
+</Box>
+
     <View style={styles.label}>
         <Text style={{ textDecorationLine: "underline"}}>Price</Text>
     </View>
