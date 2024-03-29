@@ -1,5 +1,5 @@
 import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, RefreshControl} from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import baseURL from '@assets/commons/baseurl'
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
@@ -21,7 +21,14 @@ const Brand = (props) => {
     const [refreshing, setRefreshing] = useState(false)
     const navigation = useNavigation()
 
-    // console.log("hello",brandList)
+    useEffect(() => {
+        AsyncStorage.getItem("jwt")
+            .then((res) => {
+                setToken(res)
+            })
+            .catch((error) => console.log("Errors:", error))
+    }, [])
+
     const ListHeader = () => {
         return (
             <View
@@ -42,53 +49,44 @@ const Brand = (props) => {
         )
     }
 
-    const config = {
-        headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`
-        }
-    }
-
-    const searchBrand = (text) =>
-    {
-        if (text == ''){
+    const searchBrand = (text) => {
+        if (text === '') {
             setBrandFilter(brandList)
         }
         setBrandFilter(
-            brandList.details.filter((brand) => brand.brand_name.toLowerCase().includes(text.toLowerCase()))
+            brandList.filter((brand) => brand.brand_name.toLowerCase().includes(text.toLowerCase()))
         )
     }
 
-    const deleteBrand = (id) =>
-    {
-        axios 
-        .delete(`${baseURL}brand/${id}`,{
-            headers: {Authorization: `Bearer ${token}`}
-        })
-        .then((res) =>
-        {
-            const brand = brandFilter.details.filter((item) => item.id !== id)
-            setBrandFilter(brand)
-        })
-        
-        .catch((error) => console.log(error))
+    const deleteBrand = (id) => {
+        axios
+            .delete(`${baseURL}brand/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then((res) => {
+                const updatedBrandList = brandList.filter((item) => item.id !== id);
+                setBrandList(updatedBrandList);
+                setBrandFilter(updatedBrandList);
+            })
+            .catch((error) => console.log(error))
     }
 
-    const onRefresh = useCallback(() =>{
-        setRefreshing(true)
-        setTimeout(() =>
-        {
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
             axios
-            .get(`${baseURL}brands`, config)
-            .then((res)=>
-            {
-                setBrandList(res.data);
-                setBrandFilter(res.data);
-                setLoading(false);
-            })
-            setRefreshing(false);
-        }, 500)
-    })
+                .get(`${baseURL}brands`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                .then((res) => {
+                    setBrandList(res.data);
+                    setBrandFilter(res.data);
+                    setLoading(false);
+                })
+                .catch((error) => console.log(error))
+                .finally(() => setRefreshing(false));
+        }, 500);
+    }, [token])
 
     useFocusEffect(
         useCallback(
@@ -96,26 +94,23 @@ const Brand = (props) => {
                 AsyncStorage.getItem("jwt")
                     .then((res) => {
                         setToken(res)
+                        axios
+                            .get(`${baseURL}brands`, {
+                                headers: { Authorization: `Bearer ${res}` }
+                            })
+                            .then((res) => {
+                                console.log(res.data)
+                                setBrandList(res.data);
+                                setBrandFilter(res.data);
+                                setLoading(false);
+                            })
+                            .catch((error) => console.log(error));
                     })
                     .catch((error) => console.log(error))
-                axios
-                    .get(`${baseURL}brands`, config)
-                    .then((res) => {
-                        console.log(res.data)
-                        setBrandList(res.data);
-                        setBrandFilter(res.data);
-                        setLoading(false);
-                    })
-                return () => {
-                    setBrandList();
-                    setBrandFilter();
-                    setLoading(true);
-                }
             },
             [],
         )
     )
-
 //  console.log(brandList)
   return (
     <Box flex={1}>
