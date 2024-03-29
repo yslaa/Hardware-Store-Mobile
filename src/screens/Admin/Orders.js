@@ -16,6 +16,7 @@ const Orders = (props) => {
 //   const [startDate, setStartDate] = useState(new Date())
 //   const [endDate, setEndDate] = useState(new Date())
   const [loading, setLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
 
   console.log(`${baseURL}transactions`)
 
@@ -26,17 +27,18 @@ const Orders = (props) => {
     .catch((error) => console.log(error))
 
   const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+    headers: { Authorization: `Bearer ${token}`},
+  }
+
+  console.log("Token:" , token)
+  console.log("Config:", config)
 
   useFocusEffect(
     useCallback(
       () => {
         axios.get(`${baseURL}transactions`, config)
-          .then((x) => {
-            setOrderList(x.data)
+          .then((res) => {
+            setOrderList(res.data)
             setLoading(false) // Set loading to false after data is fetched
           })
           .catch((error) => console.log(error.response.data))
@@ -47,6 +49,20 @@ const Orders = (props) => {
       [],
     )
   )
+
+  const onRefresh = useCallback(() =>{
+    setRefreshing(true)
+    setTimeout(() =>
+    {
+      axios.get(`${baseURL}transactions`, config)
+        .then((res)=>
+        {
+          setOrderList(res.data)
+          setLoading(false)
+        })
+        setRefreshing(false);
+    }, 500)
+  })
 
   console.log("Orders: ", orderList)
 
@@ -68,6 +84,9 @@ const Orders = (props) => {
         </View>
       ) : (
         <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           data={orderList.details} // Use orderList directly
           renderItem={({ item }) => (
             <OrderCard

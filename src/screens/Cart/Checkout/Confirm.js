@@ -36,9 +36,8 @@ const Confirm = (props) => {
         .catch((error) => console.log(error))
         const reducedOrderItems = cartItems.map((item) => ({
             product_name: item.product_name,
-            class: item.class,
             productType: item.type,
-            variant: item.variant,
+            brand: item.brand,
             quantity: item.quantity,
             image: item.image,
             price: item.price,

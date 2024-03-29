@@ -16,7 +16,7 @@ const codes = [
   { name: "Completed", code: "2" },
   { name: "Cancelled", code: "3" },
 ];
-const OrderCard = ({ item, select }) => {
+const OrderCard = ({ item }) => {
   const [orderStatus, setOrderStatus] = useState();
   const [statusText, setStatusText] = useState('');
   const [statusChange, setStatusChange] = useState('');
@@ -108,7 +108,10 @@ const OrderCard = ({ item, select }) => {
           Status: {statusText} {orderStatus}
         </Text>
         <Text>
-          Address: {item.shippingInfo.address1} {item.shippingInfo.address2}
+          Address 1: {item.shippingInfo.address1} 
+        </Text>
+        <Text>
+          Address 2: {item.shippingInfo.address2}
         </Text>
         <Text>City: {item.shippingInfo.city}</Text>
         <Text>Country: {item.shippingInfo.country}</Text>
@@ -119,7 +122,7 @@ const OrderCard = ({ item, select }) => {
         </View>
         {/* {item.editMode ? ( */}
         <View>
-{select ? null : <><Select
+      {item.status === "Completed" ? null : <><Select
             width="80%"
             iosIcon={<Icon name="arrow-down" color={"#007aff"} />}
             style={{ width: undefined }}
