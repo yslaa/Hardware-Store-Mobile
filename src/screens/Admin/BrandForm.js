@@ -93,7 +93,7 @@ const BrandForm = (props) => {
                         text1: "Brand Add Successfully"
                     })
                     setTimeout(() => {
-                        navigation.navigate("Brands")
+                        navigation.navigate("Brand")
                     }, 100)
                 }
             })
