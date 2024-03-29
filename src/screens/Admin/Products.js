@@ -114,13 +114,7 @@ const Products = (props) => {
   return (
     <Box flex={1}>
         <View style={styles.buttonContainer}>
-            <EasyButton
-                    secondary
-                    medium
-                    onPress={() => navigation.navigate("Orders")}>
-                    <Ionicons name="bag-outline" size={18} color="white" />
-                    <Text style={styles.buttonText}>Orders</Text>
-            </EasyButton>
+    
             <EasyButton
                     secondary
                     medium
@@ -129,14 +123,7 @@ const Products = (props) => {
                     <Ionicons name="add-circle-outline" size={18} color="white" />
                     <Text style={styles.buttonText}>Products</Text>
                 </EasyButton>
-                <EasyButton
-                    secondary
-                    medium
-                    onPress={() => navigation.navigate("Categories")}
-                >
-                    <Ionicons name="plus" size={18} color="white" />
-                    <Text style={styles.buttonText}>Categories</Text>
-                </EasyButton>
+
         </View>
         <Searchbar width="80%"
                 placeholder="Search"

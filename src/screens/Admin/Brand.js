@@ -9,6 +9,7 @@ import { Searchbar } from 'react-native-paper';
 import ListItem from '@screens/Admin/ListBrand'
 import {  Box } from 'native-base'
 import { Ionicons } from '@expo/vector-icons'
+import ListBrand from '@screens/Admin/ListBrand'
 
 var { height,width } = Dimensions.get("window"); 
 
@@ -20,7 +21,7 @@ const Brand = (props) => {
     const [refreshing, setRefreshing] = useState(false)
     const navigation = useNavigation()
 
-    console.log("hello",brandList)
+    // console.log("hello",brandList)
     const ListHeader = () => {
         return (
             <View
@@ -31,14 +32,23 @@ const Brand = (props) => {
                     <Text style={{ fontWeight: '600' }}>image</Text>
                 </View>
                 <View style={styles.headerItem}>
-                    <Text style={{ fontWeight: '600' }}>Name</Text>
+                    <Text style={{ fontWeight: '600' }}>Brand</Text>
                 </View>
+                <View style={styles.headerItem}></View>
                 <View style={styles.headerItem}>
                     <Text style={{ fontWeight: '600' }}>Variant</Text>
                 </View>
             </View>
         )
     }
+
+    const config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+        }
+    }
+
     const searchBrand = (text) =>
     {
         if (text == ''){
@@ -69,7 +79,7 @@ const Brand = (props) => {
         setTimeout(() =>
         {
             axios
-            .get(`${baseURL}brand`)
+            .get(`${baseURL}brands`, config)
             .then((res)=>
             {
                 setBrandList(res.data);
@@ -89,7 +99,7 @@ const Brand = (props) => {
                     })
                     .catch((error) => console.log(error))
                 axios
-                    .get(`${baseURL}brand`)
+                    .get(`${baseURL}brands`, config)
                     .then((res) => {
                         console.log(res.data)
                         setBrandList(res.data);
@@ -106,7 +116,7 @@ const Brand = (props) => {
         )
     )
 
-    
+//  console.log(brandList)
   return (
     <Box flex={1}>
         <View style={styles.buttonContainer}>
@@ -135,7 +145,7 @@ const Brand = (props) => {
                 ListHeaderComponent={ListHeader}
                 data={brandFilter.details}
                 renderItem={({ item, index }) => (
-                    <ListItem
+                    <ListBrand
                         item={item}
                         index={index}
                         deleteBrand={deleteBrand}

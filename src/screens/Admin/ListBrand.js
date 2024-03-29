@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flexWrap: "wrap",
-        margin: 3,
+        margin: 1,
         width: width / 6
     },
     centeredView: {
