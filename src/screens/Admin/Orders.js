@@ -19,36 +19,27 @@ const Orders = (props) => {
   const [refreshing, setRefreshing] = useState(false)
 
   console.log(`${baseURL}transactions`)
-
-  AsyncStorage.getItem("jwt")
-    .then((res) => {
-      setToken(res)
-    })
-    .catch((error) => console.log(error))
-
-  const config = {
-    headers: { Authorization: `Bearer ${token}`},
-  }
-
-  console.log("Token:" , token)
-  console.log("Config:", config)
-
+  
   useFocusEffect(
-    useCallback(
-      () => {
-        axios.get(`${baseURL}transactions`, config)
-          .then((res) => {
-            setOrderList(res.data)
-            setLoading(false) // Set loading to false after data is fetched
-          })
-          .catch((error) => console.log(error.response.data))
-        return () => {
-          setOrderList([])
-        }
+    useCallback(() => {
+      AsyncStorage.getItem("jwt")
+        .then((res) => {
+        setToken(res)
+        axios.get(`${baseURL}transactions`, {
+          headers: { Authorization: `Bearer ${res}`}
+        })
+        .then((res) => {
+          console.log(res.data)
+          setOrderList(res.data)
+          setLoading(false)
+        })
+        .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error))
       },
       [],
     )
-  )
+)
 
   const onRefresh = useCallback(() =>{
     setRefreshing(true)
