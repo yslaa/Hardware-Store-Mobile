@@ -117,7 +117,7 @@ const BrandUpdate = (props) => {
     }
 
   return (
-    <TitleContainer title="Add Brand">
+    <TitleContainer title="Edit Brand">
     <TouchableOpacity onPress={pickImage}>
                 <Text style={styles.selectImageButton}>Select Images</Text>
             </TouchableOpacity>
