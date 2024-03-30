@@ -37,62 +37,14 @@ const UserProfile = () => {
                         .then((user) => setUserProfile(user.data))
                 })
                 .catch((error) => console.log(error))
-            // axios
-            //     .get(`${baseURL}orders`)
-            //     .then((x) => {
-            //         const data = x.data;
-            //         console.log(data)
-            //         const userOrders = data.filter(
-            //             (order) =>
-            //                 // console.log(order)
-            //                 order.user ? (order.user._id === context.stateUser.user.userId) : false
-
-            //         );
-            //         setOrders(userOrders);
-            //     })
-            //     .catch((error) => console.log(error))
             return () => {
                 setUserProfile();
-                // setOrders()
             }
 
         }, [context.stateUser.isAuthenticated]))
 
         // console.log("prof:" ,userProfile.details)
     return (
-        // <Container style={styles.container}>
-        //     <ScrollView contentContainerStyle={styles.subContainer}>
-        //         <Text style={{ fontSize: 30 }}>
-        //             {userProfile ? userProfile.details.name : ""}
-        //         </Text>
-        //         <View style={{ marginTop: 20 }}>
-        //             <Text style={{ margin: 10 }}>
-        //                 Email: {userProfile ? userProfile.details.email : ""}
-        //             </Text>
-        //         </View>
-        //         <View style={{ marginTop: 80 }}>
-        //             <Button title={"Sign Out"} onPress={() => [
-        //                 AsyncStorage.removeItem("jwt"),
-        //                 logoutUser(context.dispatch)
-        //             ]} />
-        //             {/* <View style={styles.order}>
-        //                 <Text style={{ fontSize: 20 }}>My Orders</Text>
-        //                 <View>
-        //                     {orders ? (
-        //                         orders.map((order) => {
-        //                             return <OrderCard key={order.id} item={order} select="false" />;
-        //                         })
-        //                     ) : (
-        //                         <View style={styles.order}>
-        //                             <Text>You have no orders</Text>
-        //                         </View>
-        //                     )}
-        //                 </View>
-        //             </View> */}
-        //         </View>
-
-        //     </ScrollView>
-        // </Container>
     
          <View style={styles.container}>
             
@@ -118,14 +70,20 @@ const UserProfile = () => {
          </View>
          {context.stateUser && context.stateUser.user && context.stateUser.user.UserInfo && context.stateUser.user.UserInfo.roles && context.stateUser.user.UserInfo.roles.includes("Customer") && (  
          <>
-         <EasyButton
+          <EasyButton
                     secondary
                     medium
                     onPress={() => navigation.navigate("User Wishlist")}>
                     <Ionicons name="heart" size={18} color="white" />
                     <Text style={styles.buttonText}> My Wishlist</Text>
             </EasyButton>
-            </>
+            <EasyButton
+                    secondary
+                    onPress={() => navigation.navigate("User History")}>
+                    <Ionicons name="time-outline" size={18} color="white" />
+                    <Text style={styles.buttonText}>History</Text>
+            </EasyButton>
+          </>
         )}
    
         

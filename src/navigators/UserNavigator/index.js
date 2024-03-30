@@ -7,6 +7,8 @@ import Login from '@screens/User/Login';
 import UserProfile from '@screens/User/UserProfile';
 import UserEdit from '@screens/User/UserEdit'
 import UserWishlist from '@screens/User/WishlistList'
+import History from '@screens/User/History'
+import OrderDetails from '@screens/User/OrderDetails'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserNavigation = (props) => {
@@ -50,11 +52,21 @@ const UserNavigation = (props) => {
                         headerShown: false
                     }}
                 />
-                </>
-                
-       
-
-
+                <Stack.Screen
+                    name='User History'
+                    component={History}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Stack.Screen
+                    name='Order Details'
+                    component={OrderDetails}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+            </>
         </Stack.Navigator>
     );
 };
