@@ -79,9 +79,9 @@ const ListBrand = ({ item, index, deleteBrand }) => {
                 </View>
             </Modal>
             <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate("Brand Detail", { item });
-                }}
+                // onPress={() => {
+                //     navigation.navigate("Brand Detail", { item });
+                // }}
                 onLongPress={() => setModalShow(true)}
                 style={[
                     styles.container,
@@ -101,7 +101,7 @@ const ListBrand = ({ item, index, deleteBrand }) => {
                     {item.brand_name }
                 </Text>
                 <Text style={styles.item}>{item.brand}</Text>
-                <Text style={styles.item}>{item.variant}</Text>
+                <Text style={styles.item} width ="10">{item.variant}</Text>
             </TouchableOpacity>
         </View>
     );

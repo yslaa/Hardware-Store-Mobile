@@ -32,8 +32,12 @@ const getIcon = (screenName) => {
         return "trash-can";
       case "Spam":
         return "alert-circle";
-        case "Brands":
+      case "Brands":
         return "briefcase-outline";
+      case "User List":
+        return "person-outline";
+      case "Admin Order":
+        return "receipt-outline";
       default:
         return undefined;
     }
@@ -166,6 +170,8 @@ const Index = () => {
       <>
       <Drawer.Screen name="Product List" component={Main} initialParams={{ screen: 'Admin' }} />
      <Drawer.Screen name="Brands" component={Main} initialParams={{ screen: 'Brand' }} /> 
+     <Drawer.Screen name="Admin Order" component={Main} initialParams={{ screen: 'Admin Order' }} />
+     <Drawer.Screen name="User List" component={Main} initialParams={{ screen: 'User List' }} />
      <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
       </>
       ) : (

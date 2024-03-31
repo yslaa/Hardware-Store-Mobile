@@ -6,14 +6,15 @@ import EasyButton from '@shared/StyledComponents/EasyButton'
 
 var { width } = Dimensions.get("window");
 
-const ListItem = ({ item, index, deleteProduct }) => {
+const ListUser = ({ item, index, deleteUser }) => {
     const [modalShow, setModalShow] = useState(false);
     const navigation = useNavigation();
 
-    // console.log("item", item);
-
+    console.log("item", item);
+    
+    // alert to confirm delete
     const handleBackPress = () => {
-        Alert.alert("Delete Product", `Do you want to delete this ${item.product_name}?` ,[
+        Alert.alert("Delete User", `Do you want to delete this ${item.name}?` ,[
           {
             text: "Cancel",
             onPress: () => null,
@@ -22,7 +23,7 @@ const ListItem = ({ item, index, deleteProduct }) => {
           {
             text: "Delete",
             onPress: () => [
-                deleteProduct(item._id),
+                deleteUser(item._id),
                 setModalShow(false)
             ]
           },
@@ -49,22 +50,11 @@ const ListItem = ({ item, index, deleteProduct }) => {
                             style={{
                                 alignSelf: "flex-end",
                                 padding: 10,
-                                
 
                             }}
                         >
                             <Ionicons name="close-circle" size={20} />
-                            <EasyButton
-                                medium
-                                secondary
-                                onPress={() => [
-                                    navigation.navigate("ProductUpdate", { item }),
-                                    setModalShow(false)
-                                ]}
-                                title="Edit"
-                            >
-                                <Text style={styles.textStyle}>Edit</Text>
-                            </EasyButton>
+                          
 
                             <EasyButton
                                 medium
@@ -80,7 +70,7 @@ const ListItem = ({ item, index, deleteProduct }) => {
             </Modal>
             <TouchableOpacity
                 // onPress={() => {
-                //     navigation.navigate("Product Detail", { item });
+                //     navigation.navigate("Brand Detail", { item });
                 // }}
                 onLongPress={() => setModalShow(true)}
                 style={[
@@ -97,18 +87,14 @@ const ListItem = ({ item, index, deleteProduct }) => {
                     resizeMode="contain"
                     style={styles.image}
                 />
-                <Text style={styles.item} numberOfLines={1} ellipsizeMode="tail">
-                    {item.product_name }
-                </Text>
-                <Text style={styles.item} numberOfLines={1} ellipsizeMode="tail">
-                    {item.stock }
-                </Text>
+
+                <Text style={styles.item}>{item.name}</Text>
                 <Text style={styles.item}></Text>
-                <Text style={styles.item}>$ {item.price}</Text>
+                <Text style={styles.item}  width ="10">{item.roles}</Text>
             </TouchableOpacity>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -124,7 +110,7 @@ const styles = StyleSheet.create({
     },
     item: {
         flexWrap: "wrap",
-        margin: 3,
+        margin: 1,
         width: width / 6
     },
     centeredView: {
@@ -154,4 +140,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ListItem;
+export default ListUser
