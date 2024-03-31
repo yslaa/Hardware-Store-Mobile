@@ -14,10 +14,11 @@ const ProductList = (props) => {
   // console.log('item:', props)
   return (
     <TouchableOpacity
-      style={{ width: '50%' }}
+      style={{ width: '50%', }}
       onPress={() => navigation.navigate("Product Detail", { item: item })}
+      
     >
-      <View style={{ width: width / 2, backgroundColor: 'gainsboro',}}>
+      <View style={{ width: width / 2, backgroundColor: '#FFFFFF',}}>
         <ProductCard {...item} />
       </View>
     </TouchableOpacity>

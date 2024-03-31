@@ -1,5 +1,5 @@
 import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigation/drawer'
-import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon, Avatar} from "native-base";
+import {NativeBaseProvider,Button,Box,HamburgerIcon,Pressable,Heading,VStack,Text,Center,HStack,Divider,Icon, Avatar, Image} from "native-base";
 import React, { useContext } from 'react'
 import 'react-native-gesture-handler';
 import ProductContainer from '@screens/Product/ProductContainer';
@@ -10,7 +10,7 @@ import AdminNavigator from "@navigators/AdminNavigator"
 import ProductList from '@screens/Product/ProductList';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from '@react-navigation/native';
-import { Alert, BackHandler } from 'react-native';
+import { Alert, BackHandler, ImageBackground } from 'react-native';
 import AuthGlobal from '@context/Store/AuthGlobal';
 
 global.__reanimatedWorkletInit = () => { };
@@ -45,9 +45,9 @@ const getIcon = (screenName) => {
     const context = useContext(AuthGlobal)
     // console.log(context.stateUser.userProfile.email);
     return (
-      <DrawerContentScrollView {...props} safeArea>
+      <DrawerContentScrollView {...props} style={{ backgroundColor: "#FFE69A"}} safeArea>
         <VStack space="6" my="2" mx="1">
-<Box px="4">
+<Box px="4" >
 <HStack space="4" alignItems="center">
   <Avatar source={{ uri: context.stateUser.userProfile && context.stateUser.userProfile.image && context.stateUser.userProfile.image[0].url }} size="md" />
   <VStack alignItems="flex-start">
@@ -61,8 +61,8 @@ const getIcon = (screenName) => {
 </HStack>
 
 </Box>
-          <VStack divider={<Divider />} space="4">
-            <VStack space="3">
+          <VStack divider={<Divider  />} space="4">
+            <VStack space="3"  >
               {props.state.routeNames.map((name, index) => (
                 <Pressable
                   px="5"
@@ -77,7 +77,7 @@ const getIcon = (screenName) => {
                     props.navigation.navigate(name);
                   }}
                 >
-                  <HStack space="7" alignItems="center">
+                  <HStack space="7" alignItems="center" >
                     <Icon
                       color={
                         index === props.state.index ? "primary.500" : "gray.500"
@@ -133,10 +133,21 @@ const Index = () => {
       }
     })
   )
+
+  const LogoTitle = () => {
+    return (
+      <ImageBackground
+      style={{ width: 120, height: 60,  left: 180, tintColor: 'red' }} 
+        source={require('@assets/output-onlinepngtools.png')}
+      />
+    );
+  };
+  
   return (
-    <Box safeArea flex={1}>
+    <Box safeArea style={{ backgroundColor: "#FFE69A"}} flex={1}>
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      drawerContent={(props) => <CustomDrawerContent {...props}  
+      drawerStyle={{ backgroundColor: "#FFE69A" }}  />}
     >
 
       <Drawer.Screen
@@ -144,6 +155,10 @@ const Index = () => {
         options={{
           drawerLabel: 'Home',
           title: 'Home Screen',
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
         }}
         component={Main}
       />

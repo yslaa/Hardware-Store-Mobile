@@ -18,13 +18,20 @@ const Main = () => {
   const context = useContext(AuthGlobal)
 
   return (
+    <>
     <Tab.Navigator
     initialRouteName="Home"
     screenOptions={{
       tabBarHideOnKeyboard: true,
       tabBarShowLabel: false,
-      tabBarActiveTintColor: "#e91e63",
-    }}
+      tabBarActiveTintColor: "#FFFFFF",
+      tabBarStyle: {
+        backgroundColor: "#FFE69A", 
+      },
+      headerStyle: {
+        backgroundColor: '#FFE69A',
+      },
+       }}
   >
     {context.stateUser && context.stateUser.user && context.stateUser.user.UserInfo && context.stateUser.user.UserInfo.roles && context.stateUser.user.UserInfo.roles.includes("Admin") ? (
      <>
@@ -140,6 +147,7 @@ const Main = () => {
       </>
     )}
   </Tab.Navigator>
+  </>
   );
 };
 

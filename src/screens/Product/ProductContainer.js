@@ -75,14 +75,18 @@ const ProductContainer = () => {
     return (
    
         <View style={styles.container}>
-              <VStack w="100%" space={5} alignSelf="center">
+              <VStack w="100%" h="75 "space={5} style={{ alignItems: 'center' }}>
                     <Input
                         onFocus={openList}
                         onChangeText={(text) => searchProduct(text)}
                         placeholder="Search"
                         variant="filled"
-                        width="100%"
-                        borderRadius="10"
+                        width="80%"
+                        borderRadius="16"
+                        borderColor={"#92B4EC"}
+                        backgroundColor={"#FFFFFF"}
+                        borderWidth={2}
+                        top="5"
                         py="1"
                         px="2"
                         InputLeftElement={<Icon ml="2" size="4" color="gray.400" as={<Ionicons name="search" />} />}
@@ -128,14 +132,14 @@ const ProductContainer = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'gainsboro',
+        backgroundColor: '#FFFFFF',
     },
     listContainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'flex-start',
         flexWrap: 'wrap',
-        backgroundColor: 'gainsboro',
+        backgroundColor: '#FFFFFF',
     },
     center: {
         justifyContent: 'center',
