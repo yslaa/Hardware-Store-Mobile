@@ -57,7 +57,7 @@ const Main = () => {
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons
-              name="hammer-outline"
+              name="bar-chart-outline"
               style={{ position: "relative" }}
               color="black"
               size={30}
