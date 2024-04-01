@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView, Button, View as Divider, TextInput, TouchableOpacity } from "react-native";
-import { Text, HStack, VStack, Avatar, Spacer, Center} from "native-base";
+import { Text, HStack, VStack, Avatar, Spacer, Center } from "native-base";
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Toast from "react-native-toast-message";
@@ -8,12 +8,12 @@ import axios from "axios";
 import baseURL from "../../../assets/commons/baseurl";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux'
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 var { width, height } = Dimensions.get("window");
 
 const StarRating = ({ rating, onRate }) => {
-    const stars = [1, 2, 3, 4, 5];
+  const stars = [1, 2, 3, 4, 5];
   
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -33,7 +33,7 @@ const StarRating = ({ rating, onRate }) => {
 
 const Comment = ({ route }) => {
 
-    const navigation = useNavigation()
+  const navigation = useNavigation()
 
     // console.log("Data", route.params)
     const itemDetails = route.params.product
@@ -134,63 +134,76 @@ const Comment = ({ route }) => {
       };
 
   return (
-    <Center>
-        
-    <ScrollView contentContainerStyle={styles.container}>
+    <Center style={styles.container}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.titleContainer}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Product Details</Text>
-            {itemDetails && brands ? (
-                <View style={{ borderWidth: 1, borderColor: "orange" }}>
-                    <Text style={styles.title}>{itemDetails.product_name}</Text>
-                    <View style={{ padding: 15 }}>
-                        <Avatar style={{alignSelf: "center"}}size="48px" source={{
-                                uri: itemDetails.image?.[0]?.url
-                            }}
-                        />
-                        <Text>Brand: {brands.details.brand_name}</Text>
-                        <Text>Variant: {brands.details.variant}</Text>
-                        <Text>Type: {itemDetails.productType}</Text>
-                        <Text>Price: {itemDetails.price}</Text>
-                    </View>
-                    <Divider style={styles.divider} />
-
-                    <Text style={styles.title}>Your Rating</Text>
-                    <StarRating rating={rating} onRate={handleRate} />
-
-                    <TextInput
-                        style={styles.commentInput}
-                        multiline={true}
-                        numberOfLines={4}
-                        placeholder="Comment here..."
-                        onChangeText={setComments}
-                        value={comments}
-                    />
-
-                    <Button
-                        onPress={() => submitComment()}
-                        title="Comment"
-                        size="sm"
-                        variant="outline"
-                    />
-
-                    <Divider style={styles.divider} />
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Product Details</Text>
+          {itemDetails && brands ? (
+            <View style={styles.productDetails}>
+              <Text style={styles.title}>{itemDetails.product_name}</Text>
+              <View style={styles.productInfo}>
+                <Avatar style={{ alignSelf: "center" }} size="48px" source={{ uri: itemDetails.image?.[0]?.url }} />
+                <View style={{ marginLeft: 10 }}>
+                  <Text>Brand: {brands.details.brand_name}</Text>
+                  <Text>Variant: {brands.details.variant}</Text>
+                  <Text>Type: {itemDetails.productType}</Text>
+                  <Text>Price: ${itemDetails.price}</Text>
                 </View>
-            ) : null}
+              </View>
+              <Divider style={styles.divider} />
+
+              <Text style={styles.title}>Rate this Product</Text>
+              <StarRating rating={rating} onRate={handleRate} />
+
+              <TextInput
+                style={styles.commentInput}
+                multiline={true}
+                numberOfLines={4}
+                placeholder="Comment here..."
+                onChangeText={setComments}
+                value={comments}
+              />
+
+              <Button onPress={() => submitComment()} title="Comment" size="sm" variant="outline" />
+            </View>
+          ) : null}
         </View>
-    </ScrollView>
-</Center>
-  )
-}
+      </ScrollView>
+    </Center>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        height: height,
-        padding: 8,
-        alignContent: "center",
-        backgroundColor: "white",
-    },
-    titleContainer: {
+  container: {
+    flex: 1, // Occupy full screen height
+    backgroundColor: "white",
+  },
+  contentContainer: {
+    paddingBottom: 20, 
+  },
+  titleContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 8,
+  },
+  title: {
+    alignSelf: "center",
+    margin: 8,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  productDetails: {
+    borderWidth: 1,
+    borderColor: "orange",
+    padding: 10,
+    borderRadius: 5, // Add rounded corners for better look
+  },
+  productInfo: {
+    flexDirection: 'row', // Arrange brand details in a row
+    marginTop: 10,
+    alignItems: 'center', // Align avatar and details vertically
+  },
+titleContainer: {
         justifyContent: "center",
         alignItems: "center",
         margin: 8,
@@ -200,17 +213,6 @@ const styles = StyleSheet.create({
         margin: 8,
         fontSize: 16,
         fontWeight: "bold",
-    },
-    listItem: {
-        alignItems: "center",
-        backgroundColor: "white",
-        justifyContent: "center",
-        width: width / 1.2,
-    },
-    body: {
-        margin: 10,
-        alignItems: "center",
-        flexDirection: "row",
     },
     divider: {
         borderWidth: 1,
