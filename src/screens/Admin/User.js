@@ -1,5 +1,5 @@
 import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, RefreshControl} from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import baseURL from '@assets/commons/baseurl'
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
@@ -9,6 +9,7 @@ import { Searchbar } from 'react-native-paper';
 import {  Box } from 'native-base'
 import { Ionicons } from '@expo/vector-icons'
 import ListUser from '@screens/Admin/ListUser'
+import AuthGlobal from '@context/Store/AuthGlobal'
 
 var { height,width } = Dimensions.get("window"); 
 const User = () => {
@@ -17,8 +18,9 @@ const User = () => {
     const [userFilter, setUserFilter] = useState([])
     const [token, setToken] = useState('')
     const [refreshing, setRefreshing] = useState(false)
+    const context = useContext(AuthGlobal)
     const navigation = useNavigation()
-
+    
     useEffect(() => {
         AsyncStorage.getItem("jwt")
             .then((res) => {
@@ -52,7 +54,7 @@ const User = () => {
             setUserFilter(userList)
         }
         setUserFilter(
-            userList.details.filter((users) => users.name.toLowerCase().includes(text.toLowerCase()))
+            userList.filter((users) => users.name.toLowerCase().includes(text.toLowerCase()))
         )
     }
 
@@ -77,8 +79,9 @@ const User = () => {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 .then((res) => {
-                    setUserList(res.data);
-                    setUserFilter(res.data);
+                    const filteredUsers = res.data.details.filter(user => user._id !== context.stateUser?.userProfile?._id);
+                    setUserList(filteredUsers);
+                    setUserFilter(filteredUsers);
                     setLoading(false);
                 })
                 .catch((error) => console.log(error))
@@ -91,25 +94,30 @@ const User = () => {
             () => {
                 AsyncStorage.getItem("jwt")
                     .then((res) => {
-                        setToken(res)
+                        setToken(res);
                         axios
                             .get(`${baseURL}users`, {
                                 headers: { Authorization: `Bearer ${res}` }
                             })
                             .then((res) => {
-                                console.log(res.data)
-                                setUserList(res.data);
-                                setUserFilter(res.data);
+                                const filteredUsers = res.data.details.filter(user => user._id !== context.stateUser?.userProfile?._id);
+                                setUserList(filteredUsers);
+                                setUserFilter(filteredUsers);
                                 setLoading(false);
+                                // res.data.details.forEach(user => {
+                                //     console.log("User ID:", user._id);
+                                // });
                             })
                             .catch((error) => console.log(error));
                     })
-                    .catch((error) => console.log(error))
+                    .catch((error) => console.log(error));
             },
             [],
         )
-    )
+    );
 //  console.log(userList)
+console.log("user", userFilter)
+// console.log("user",context.stateUser && context.stateUser.userProfile && context.stateUser.userProfile._id )
   return (
     <Box flex={1}>
      
@@ -127,7 +135,7 @@ const User = () => {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
                 ListHeaderComponent={ListHeader}
-                data={userFilter.details}
+                data={userFilter}
                 renderItem={({ item, index }) => (
                     <ListUser
                         item={item}

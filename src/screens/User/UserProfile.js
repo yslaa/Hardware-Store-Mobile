@@ -55,11 +55,13 @@ const UserProfile = () => {
                source={{ uri: userProfile ? userProfile.details.image[0].url  : "" }}
                accessibilityLabel={userProfile ? "User Profile Image" : "No Image Available"}
              />
+             {context.stateUser?.user?.UserInfo?.roles?.includes("Customer") && (
              <TouchableOpacity 
              onPress={() => navigation.navigate("Edit User")}
             variant={"ghost"} >
             <Text> Edit </Text>
             </TouchableOpacity>
+            )}
              <Text style={styles.name}> {userProfile ? userProfile.details.name : ""}</Text>
              <Text style={{fontSize: 13}}> Email: {userProfile ? userProfile.details.email : ""}</Text>
            </View>
