@@ -91,7 +91,7 @@ const Comment = ({ route }) => {
         }
                     
         const commentData = {
-            product: itemDetails._id,
+            product: itemDetails.productId,
             ratings: rating,
             text: comments
         };
@@ -164,7 +164,7 @@ const Comment = ({ route }) => {
                 value={comments}
               />
 
-              <Button onPress={() => submitComment()} title="Comment" size="sm" variant="outline" />
+              <Button onPress={() => submitComment()} title="Submit Comment" size="sm" variant="outline" />
             </View>
           ) : null}
         </View>
@@ -175,7 +175,7 @@ const Comment = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Occupy full screen height
+    flex: 1, 
     backgroundColor: "white",
   },
   contentContainer: {
@@ -196,24 +196,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "orange",
     padding: 10,
-    borderRadius: 5, // Add rounded corners for better look
+    borderRadius: 5, 
   },
   productInfo: {
-    flexDirection: 'row', // Arrange brand details in a row
+    flexDirection: 'row',
     marginTop: 10,
-    alignItems: 'center', // Align avatar and details vertically
+    alignItems: 'center', 
   },
-titleContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 8,
-    },
-    title: {
-        alignSelf: "center",
-        margin: 8,
-        fontSize: 16,
-        fontWeight: "bold",
-    },
     divider: {
         borderWidth: 1,
         borderColor: 'orange',

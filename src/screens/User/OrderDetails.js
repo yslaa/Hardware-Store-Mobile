@@ -53,6 +53,12 @@ const OrderDetails = ({ route }) => {
                     </View>
                     <Divider style={styles.divider} />
 
+                    <Text style={styles.title}>Total</Text>
+                    <View style={{ padding: 15, alignSelf: "center" }}>
+                        <Text>${OrderDetails.totalPrice}</Text>
+                    </View>
+                    <Divider style={styles.divider} />
+
                     <Text style={styles.title}>Payment</Text>
                     <View style={{ padding: 15, alignSelf: "center" }}>
                         <Text>{payment.value}</Text>
@@ -63,7 +69,7 @@ const OrderDetails = ({ route }) => {
                     <Text style={styles.title}>items</Text>
                     {orderItems.map((item) => {
                         return (
-                            <HStack space={[2, 3]} justifyContent="space-between" key={item._id}>
+                            <HStack space={[2, 3]} justifyContent="space-between" key={item._id} style={styles.listItem}>
                                 <Avatar size="48px" source={{
                                     uri: item.image[0].url
                                 }}
@@ -82,10 +88,10 @@ const OrderDetails = ({ route }) => {
                                     Qty: {item.quantity}
                                 </Text>
                                 <Spacer />
-                                <Text fontSize="xs" _dark={{
-                                    color: "warmGray.50"
-                                }} color="coolGray.800" alignSelf="flex-start">
-                                $ {item.price}
+                                <Text color="coolGray.800" _dark={{
+                                    color: 'warmGray.50'
+                                }} marginleft="2">
+                                    $ {item.price}
                                 </Text>
                                 <Button
                                     onPress={() => navigation.navigate('Comment', { product: item })}
@@ -106,7 +112,6 @@ const OrderDetails = ({ route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         height: height,
         padding: 8,
         alignContent: "center",
@@ -139,6 +144,13 @@ const styles = StyleSheet.create({
         borderColor: 'orange',
         marginBottom: 10,
     },
+    listItem: {
+        alignItems: "center",
+        backgroundColor: "white",
+        justifyContent: "center", 
+        width: width / 1.2,
+        marginVertical: 5,
+      },
 });
 
 export default OrderDetails

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Image, View, StyleSheet, Text, ScrollView, Button, Alert } from "react-native";
-import { Left, Right, Container, H1, Center, Heading } from 'native-base'
+import { Image, View, StyleSheet, Text, ScrollView, Button, Alert, Dimensions } from "react-native";
+import { Spacer, Center, Heading, HStack } from 'native-base'
 import TrafficLight from '@shared/StyledComponents/TrafficLight'
 import EasyButton from '@shared/StyledComponents/EasyButton'
 import Swiper from "react-native-swiper";
@@ -15,9 +15,11 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import baseURL from "@assets/commons/baseurl";
 
+var { width, height } = Dimensions.get("window");
+
 const SingleProduct = ({ route }) => {
     const context = useContext(AuthGlobal)
-    // console.log( route.params.item.wishlist)
+    // console.log("Logging Item", route.params.item)
     // console.log(context.stateUser.userProfile._id)
     // console.log("single Product", route.params.item.wishlist.map(item => item.users).includes(context.stateUser.userProfile._id));
     const [item, setItem] = useState(route.params.item)
@@ -26,6 +28,7 @@ const SingleProduct = ({ route }) => {
     const [quantity, setQuantity] = useState(1);
     const [isLogin, setIsLogin] = useState(false)
     const [token, setToken] = useState('')
+    const [comments, setComments] = useState([])
     const [wishListOk, setWishListOk] = useState(false)
     const dispatch = useDispatch();
     const navigation = useNavigation()
@@ -132,6 +135,24 @@ const SingleProduct = ({ route }) => {
             setAvailability(null)
         }
     }, [])
+
+        AsyncStorage.getItem("jwt")
+            .then((res) => {
+                axios.get(`${baseURL}comments`, {
+                    headers: {
+                        Authorization: `Bearer ${res}`,
+                    },
+                })
+                .then((x) => {
+                        const data = x.data.details;
+                        const allComments = x.data.details;
+
+                    // Filter comments based on productID
+                        const prodComment = allComments.filter((com) => com.product && com.product === item._id);
+                        setComments(prodComment);
+                })
+                .catch((error) => console.log(error.response.data))
+            })
 
     const incrementQuantity = () => {
         if(quantity < item.stock) {
@@ -240,6 +261,25 @@ const SingleProduct = ({ route }) => {
                         }}
                     />
                 ) : <Text style={styles.unavailableText}>Currently Unavailable</Text>}
+
+        {comments.map((item) => {
+                        return (
+                            <HStack space={[2, 3]} justifyContent="space-between" key={item._id}>
+                                <Spacer />
+                                <Text color="coolGray.800" _dark={{
+                                    color: 'warmGray.50'
+                                }} marginleft="2">
+                                    Ratings: {item.ratings}
+                                </Text>
+                                <Spacer />
+                                <Text color="coolGray.800" _dark={{
+                                    color: 'warmGray.50'
+                                }} marginleft="2">
+                                    Comment: {item.text}
+                                </Text>
+                            </HStack>
+                        )
+                    })}              
     </ScrollView>
 </Center >
   )
@@ -312,7 +352,6 @@ const styles = StyleSheet.create({
     quantityText: {
         fontSize: 16,
         marginHorizontal: 10,
-        
     },
 });
 export default SingleProduct
