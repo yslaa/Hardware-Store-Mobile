@@ -10,7 +10,7 @@ import AdminNavigator from "@navigators/AdminNavigator"
 import ProductList from '@screens/Product/ProductList';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from '@react-navigation/native';
-import { Alert, BackHandler, ImageBackground } from 'react-native';
+import { Alert, BackHandler, ImageBackground, View } from 'react-native';
 import AuthGlobal from '@context/Store/AuthGlobal';
 
 global.__reanimatedWorkletInit = () => { };
@@ -142,10 +142,14 @@ const Index = () => {
 
   const LogoTitle = () => {
     return (
+  
+      <View style={{ position: 'absolute', left: 200, bottom: 0 }}>
       <ImageBackground
-      style={{ width: 120, height: 60,  left: 180, tintColor: 'red' }} 
+        style={{ width: 85, height: 50, tintColor: 'red' }} 
         source={require('@assets/output-onlinepngtools.png')}
       />
+    </View>
+
     );
   };
   
