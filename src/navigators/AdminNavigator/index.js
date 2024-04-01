@@ -12,8 +12,8 @@ const Index = () => {
         name="Products" 
         component={Products}
         options={{
-            title: "Products"
-        }}
+          headerShown: false
+      }}
         />
         <Stack.Screen name="ProductForm" component={ProductForm}/>
         <Stack.Screen name="ProductUpdate" component={ProductUpdate}/>

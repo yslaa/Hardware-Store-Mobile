@@ -10,7 +10,7 @@ return (
         name="Charts"
         component={Charts}
         options={{
-            title: "Charts"
+            headerShown: false
         }}
         />
     </Stack.Navigator>

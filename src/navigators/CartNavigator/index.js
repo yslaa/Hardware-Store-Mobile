@@ -20,8 +20,8 @@ const Index = () => {
           name="Checkout"
           component={CheckoutNavigator}
           options={{
-            title: 'Checkout' 
-          }}
+            headerShown: false
+        }}
         />
     </Stack.Navigator>
   )

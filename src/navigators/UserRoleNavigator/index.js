@@ -10,8 +10,8 @@ const Index = () => {
         name="UserAll" 
         component={User}
         options={{
-            title: "User"
-        }}
+          headerShown: false
+      }}
         />
     </Stack.Navigator>
   )

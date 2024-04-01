@@ -13,8 +13,8 @@ const index = () => {
         name="Brand"
         component={Brand}
         options={{
-            title: "Brand"
-        }}
+          headerShown: false
+      }}
         />
         <Stack.Screen name="BrandForm" component={BrandForm}/>
         <Stack.Screen name="BrandUpdate" component={BrandUpdate}/>

@@ -14,7 +14,7 @@ const index= () => {
                 name="Orders"
                 component={Orders}
                 options={{
-                    title: "Orders"
+                    headerShown: false
                 }}
             />
         </Stack.Navigator>

@@ -38,6 +38,8 @@ const getIcon = (screenName) => {
         return "person-outline";
       case "Admin Order":
         return "receipt-outline";
+        case "Chart":
+        return "bar-chart-outline";
       default:
         return undefined;
     }
@@ -168,17 +170,63 @@ const Index = () => {
       />
        {context.stateUser && context.stateUser.user && context.stateUser.user.UserInfo && context.stateUser.user.UserInfo.roles && context.stateUser.user.UserInfo.roles.includes("Admin") ? (
       <>
-      <Drawer.Screen name="Product List" component={Main} initialParams={{ screen: 'Admin' }} />
-     <Drawer.Screen name="Brands" component={Main} initialParams={{ screen: 'Brand' }} /> 
-     <Drawer.Screen name="Admin Order" component={Main} initialParams={{ screen: 'Admin Order' }} />
-     <Drawer.Screen name="User List" component={Main} initialParams={{ screen: 'User List' }} />
-     <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
+      <Drawer.Screen name="Product List" component={Main} initialParams={{ screen: 'Admin' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }} />
+        <Drawer.Screen name="Chart" component={Main} initialParams={{ screen: 'Chart' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }}/> 
+        <Drawer.Screen name="Brands" component={Main} initialParams={{ screen: 'Brand' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }}/> 
+     <Drawer.Screen name="Admin Order" component={Main} initialParams={{ screen: 'Admin Order' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }}/>
+     <Drawer.Screen name="User List" component={Main} initialParams={{ screen: 'User List' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }}/>
+     <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }}/>
       </>
       ) : (
         <>
-    <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }} />
-      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} /> 
-      <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} />
+    <Drawer.Screen name="Products" component={Main} initialParams={{ screen: 'Products' }}  options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }}/>
+      <Drawer.Screen name="Cart" component={Main} initialParams={{ screen: 'Cart' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }} /> 
+      <Drawer.Screen name="User Profile" component={Main} initialParams={{ screen: 'User' }} options={{
+          headerStyle: {
+            backgroundColor: '#FFE69A'
+          },
+          headerTitle: props => <LogoTitle {...props} />,
+        }} />
      </>
       )}
     </Drawer.Navigator>
