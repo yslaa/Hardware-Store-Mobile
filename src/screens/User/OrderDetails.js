@@ -88,7 +88,7 @@ const OrderDetails = ({ route }) => {
                                 $ {item.price}
                                 </Text>
                                 <Button
-                                    onPress={() => navigation.navigate('CommentScreen', { productId: item._id })}
+                                    onPress={() => navigation.navigate('Comment', { product: item })}
                                     title="Comment"
                                     size="sm"
                                     variant="outline"

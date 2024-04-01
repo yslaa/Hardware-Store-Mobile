@@ -9,6 +9,7 @@ import UserEdit from '@screens/User/UserEdit'
 import UserWishlist from '@screens/User/WishlistList'
 import History from '@screens/User/History'
 import OrderDetails from '@screens/User/OrderDetails'
+import Comment from '../../screens/User/Comment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserNavigation = (props) => {
@@ -62,6 +63,13 @@ const UserNavigation = (props) => {
                 <Stack.Screen
                     name='Order Details'
                     component={OrderDetails}
+                    options={{
+                        headerShown: false
+                    }}
+                />
+                <Stack.Screen
+                    name='Comment'
+                    component={Comment}
                     options={{
                         headerShown: false
                     }}

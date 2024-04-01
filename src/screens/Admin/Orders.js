@@ -45,11 +45,16 @@ const Orders = (props) => {
     setRefreshing(true)
     setTimeout(() =>
     {
-      axios.get(`${baseURL}transactions`, config)
-        .then((res)=>
-        {
-          setOrderList(res.data)
-          setLoading(false)
+      AsyncStorage.getItem("jwt")
+        .then((res) => {
+          axios.get(`${baseURL}transactions`, {
+              headers: { Authorization: `Bearer ${res}`}
+            })
+            .then((res)=> {
+              console.log("POTAKING" ,res.data.details)
+              setOrderList(res.data.details)
+              setLoading(false)
+            })
         })
         setRefreshing(false);
     }, 500)

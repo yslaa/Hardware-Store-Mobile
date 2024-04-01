@@ -37,7 +37,7 @@ const HistoryCard = ({ item }) => {
               Toast.show({
                 topOffset: 60,
                 type: "success",
-                text1: "Transaction Edited",
+                text1: "Order Detail",
                 text2: "",
               });
               setTimeout(() => {
@@ -109,8 +109,7 @@ const HistoryCard = ({ item }) => {
           <Text>Total Price: </Text>
           <Text style={styles.price}>$ {item.totalPrice}</Text>
         </View>
-        {/* {item.editMode ? ( */}
-        <View>
+        {item.status === "Completed"? <View>
           <>
             <EasyButton
               secondary
@@ -120,7 +119,7 @@ const HistoryCard = ({ item }) => {
               <Text style={{ color: "white" }}>Order Details</Text>
             </EasyButton>
           </>
-        </View>
+        </View>: null}
       </View>
     </View>
 
