@@ -8,6 +8,7 @@ import AdminNavigator from "@navigators/AdminNavigator"
 import BrandNavigator from "@navigators/BrandNavigator"
 import OrderNavigator from "@navigators/OrderNavigator"
 import UserRoleNavigator from "@navigators/UserRoleNavigator"
+import ChartNavigator from "@navigators/ChartNavigator"
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "native-base";
@@ -39,6 +40,20 @@ const Main = () => {
      <Tab.Screen
         name="Admin"
         component={AdminNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="hammer-outline"
+              style={{ position: "relative" }}
+              color="black"
+              size={30}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chart"
+        component={ChartNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <Ionicons
