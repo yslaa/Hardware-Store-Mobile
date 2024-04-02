@@ -308,7 +308,7 @@ const SingleProduct = ({ route }) => {
                                 <Text color="coolGray.800" _dark={{
                                     color: 'warmGray.50'
                                 }} marginleft="2">
-                                    User: {item.user.username}
+                                    User: {item?.user?.username}
                                 </Text>
                                 <Text color="coolGray.800" _dark={{
                                     color: 'warmGray.50'

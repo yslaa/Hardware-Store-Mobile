@@ -78,7 +78,7 @@ const Comment = ({ route }) => {
     )
         })
     )
-    // console.log("User Profile: ",context.stateUser.userProfile)
+    // console.log("User Profile: ",context.stateUser?.userProfile?.name)
 
     const submitComment = () => {
         if (comments.trim() === '') {
@@ -118,6 +118,7 @@ const Comment = ({ route }) => {
                         text1: "Comment Posted",
                         });
                         setBrands(res.data)
+                        navigation.navigate("User History")
                 }})
                 .catch((error) => {
                     Toast.show({

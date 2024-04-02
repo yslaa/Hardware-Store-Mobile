@@ -22,7 +22,7 @@ const Reviews = (props) => {
     const [refreshing, setRefreshing] = useState(false)
     const navigation = useNavigation()
 
-    const userID = context.stateUser.userProfile._id
+    const userID = context.stateUser?.userProfile?._id
 
     // console.log("hello",commentList)
     // console.log("User Data: ", context.stateUser.userProfile._id)

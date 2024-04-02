@@ -24,12 +24,21 @@ const OrderCard = ({ item }) => {
   const [cardColor, setCardColor] = useState('');
   const navigation = useNavigation()
 
-  const updateOrder = () => {
+  
+  useEffect(() => {
     AsyncStorage.getItem("jwt")
-      .then((res) => {
-        setToken(res);
-      })
-      .catch((error) => console.log(error));
+        .then((res) => {
+            setToken(res)
+        })
+        .catch((error) => console.log("Errors:", error))
+}, [])
+
+  const updateOrder = () => {
+    // AsyncStorage.getItem("jwt")
+    //   .then((res) => {
+    //     setToken(res);
+    //   })
+    //   .catch((error) => console.log(error));
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -58,7 +67,7 @@ const OrderCard = ({ item }) => {
           });
           setTimeout(() => {
             navigation.navigate("Orders");
-          }, 500);
+          }, 100);
         }
       })
       .catch((error) => {
