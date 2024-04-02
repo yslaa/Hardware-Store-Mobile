@@ -2,7 +2,7 @@ import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 
 import Reviews from "../../screens/User/Reviews"
-import ReviewUpdate from "../../screens/User/ListReview";
+import ReviewUpdate from "../../screens/User/ReviewUpdate";
 
 
 const Stack = createStackNavigator();

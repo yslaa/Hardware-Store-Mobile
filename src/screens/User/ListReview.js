@@ -6,6 +6,7 @@ import EasyButton from '@shared/StyledComponents/EasyButton'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import baseURL from '@assets/commons/baseurl'
+import Toast from 'react-native-toast-message'
 
 var { width } = Dimensions.get("window");
 
@@ -15,6 +16,23 @@ const ListItem = ({ item, index, deleteProduct }) => {
     const [product, setProduct] = useState([])
 
     console.log("Reviews", item);
+
+    const deleteComment = (id) =>
+    {
+        AsyncStorage.getItem("jwt")
+            .then((res) => {
+                axios 
+                .delete(`${baseURL}comment/${id}`,{
+                    headers: {Authorization: `Bearer ${res}`}
+                })
+                .then((res) =>
+                {
+                    Alert.alert("Comment Deleted")
+                })
+                .catch((error) => console.log(error))
+            })
+       
+    }
 
     const handleBackPress = () => {
         Alert.alert("Delete Comment", `Do you want to delete this comment?` ,[
