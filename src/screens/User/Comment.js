@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { View, StyleSheet, Dimensions, ScrollView, Button, View as Divider, TextInput, TouchableOpacity } from "react-native";
 import { Text, HStack, VStack, Avatar, Spacer, Center } from "native-base";
 
@@ -9,6 +9,8 @@ import baseURL from "../../../assets/commons/baseurl";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AuthGlobal from "@context/Store/AuthGlobal";
+
 
 var { width, height } = Dimensions.get("window");
 
@@ -36,6 +38,7 @@ const Comment = ({ route }) => {
   const navigation = useNavigation()
 
     // console.log("Data", route.params)
+    const context = useContext(AuthGlobal)
     const itemDetails = route.params.product
     const [brands, setBrands] = useState()
     const [rating, setRating] = useState()
@@ -76,16 +79,14 @@ const Comment = ({ route }) => {
     )
         })
     )
-    // console.log("ITEMS: ", itemDetails)
-    // console.log("Brand:", brands)
+    // console.log("User Profile: ",context.stateUser.userProfile)
 
     const submitComment = () => {
         if (comments.trim() === '') {
             Toast.show({
                 topOffset: 60,
                 type: "warning",
-                text1: "Please enter a comment",
-                text2: "",
+                text1: "Please enter a comment"
             });
             return;
         }
@@ -93,7 +94,11 @@ const Comment = ({ route }) => {
         const commentData = {
             product: itemDetails.productId,
             ratings: rating,
-            text: comments
+            text: comments,
+            user: {
+              _id: context.stateUser.userProfile._id,
+              username: context.stateUser.userProfile.name
+            }
         };
 
         console.log(commentData)
@@ -112,7 +117,6 @@ const Comment = ({ route }) => {
                         topOffset: 60,
                         type: "success",
                         text1: "Comment Posted",
-                        text2: "",
                         });
                         setBrands(res.data)
                 }})
@@ -165,6 +169,7 @@ const Comment = ({ route }) => {
               />
 
               <Button onPress={() => submitComment()} title="Submit Comment" size="sm" variant="outline" />
+              {/* <Toast /> */}
             </View>
           ) : null}
         </View>

@@ -9,6 +9,7 @@ import BrandNavigator from "@navigators/BrandNavigator"
 import OrderNavigator from "@navigators/OrderNavigator"
 import UserRoleNavigator from "@navigators/UserRoleNavigator"
 import ChartNavigator from "@navigators/ChartNavigator"
+import ReviewNavigator from '@navigators/ReviewNavigator'
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "native-base";
@@ -153,6 +154,21 @@ const Main = () => {
             tabBarIcon: ({ color }) => (
               <Ionicons
                 name="cart-outline"
+                style={{ position: "relative" }}
+                color="black"
+                size={30}
+              />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Reviews"
+          component={ReviewNavigator}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Ionicons
+                name="eye-outline"
                 style={{ position: "relative" }}
                 color="black"
                 size={30}

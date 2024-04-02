@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Image, View, StyleSheet, Text, ScrollView, Button, Alert, Dimensions } from "react-native";
+import { Image, View, StyleSheet, Text, ScrollView, Button, Alert, Dimensions, View as Divider } from "react-native";
 import { Spacer, Center, Heading, HStack } from 'native-base'
 import TrafficLight from '@shared/StyledComponents/TrafficLight'
 import EasyButton from '@shared/StyledComponents/EasyButton'
@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import Toast from "react-native-toast-message";
 import AuthGlobal from "@context/Store/AuthGlobal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -17,10 +17,44 @@ import baseURL from "@assets/commons/baseurl";
 
 var { width, height } = Dimensions.get("window");
 
+const Ratings = ({ value}) => {
+    const size = 13;
+    const color = styles.colors;    
+    return (
+      <HStack space={0.4} mt={1} alignItems="center">
+        <FontAwesome
+          name={value >= 1 ? "star" : value >= 0.5 ? "star-half-o" : "star-o"}
+          color='orange'
+          size={size}
+        />
+        <FontAwesome
+          name={value >= 2 ? "star" : value >= 1.5 ? "star-half-o" : "star-o"}
+          color='orange'
+          size={size}
+        />
+        <FontAwesome
+          name={value >= 3 ? "star" : value >= 2.5 ? "star-half-o" : "star-o"}
+          color='orange'
+          size={size}
+        />
+        <FontAwesome
+          name={value >= 4 ? "star" : value >= 3.5 ? "star-half-o" : "star-o"}
+          color='orange'
+          size={size}
+        />
+        <FontAwesome
+          name={value >= 5 ? "star" : value >= 4.5 ? "star-half-o" : "star-o"}
+          color='orange'
+          size={size}
+        />
+      </HStack>
+    );
+  }
+
 const SingleProduct = ({ route }) => {
     const context = useContext(AuthGlobal)
     // console.log("Logging Item", route.params.item)
-    // console.log(context.stateUser.userProfile._id)
+    // console.log(context.stateUser.userProfile._id)rr
     // console.log("single Product", route.params.item.wishlist.map(item => item.users).includes(context.stateUser.userProfile._id));
     const [item, setItem] = useState(route.params.item)
     const [availability, setAvailability] = useState('')
@@ -165,7 +199,9 @@ const SingleProduct = ({ route }) => {
             setQuantity(prevQuantity => prevQuantity - 1);
         }
     }
-    
+
+    console.log("Comment Data: ", comments)
+
   return (
     <Center flexGrow={1}>
     <ScrollView style={{ marginBottom: 80}}>
@@ -262,14 +298,22 @@ const SingleProduct = ({ route }) => {
                     />
                 ) : <Text style={styles.unavailableText}>Currently Unavailable</Text>}
 
-        {comments.map((item) => {
+        <Divider style={styles.divider} />
+        <Text style={styles.title}>Comments and Ratings</Text>
+        {comments? comments.map((item) => {
                         return (
-                            <HStack space={[2, 3]} justifyContent="space-between" key={item._id}>
+                            <>
+                                <Divider style={styles.divider2} />
                                 <Spacer />
                                 <Text color="coolGray.800" _dark={{
                                     color: 'warmGray.50'
                                 }} marginleft="2">
-                                    Ratings: {item.ratings}
+                                    User: {item.user.username}
+                                </Text>
+                                <Text color="coolGray.800" _dark={{
+                                    color: 'warmGray.50'
+                                }} marginleft="2">
+                                    Ratings: <Ratings value={item.ratings}/>
                                 </Text>
                                 <Spacer />
                                 <Text color="coolGray.800" _dark={{
@@ -277,9 +321,10 @@ const SingleProduct = ({ route }) => {
                                 }} marginleft="2">
                                     Comment: {item.text}
                                 </Text>
-                            </HStack>
+                                <Divider style={styles.divider2} />
+                            </>
                         )
-                    })}              
+                    }) : null}              
     </ScrollView>
 </Center >
   )
@@ -352,6 +397,22 @@ const styles = StyleSheet.create({
     quantityText: {
         fontSize: 16,
         marginHorizontal: 10,
+    },
+    divider: {
+        borderWidth: 1,
+        borderColor: 'lightblue',
+        marginTop: 30,
+    },
+    divider2: {
+        borderWidth: 1,
+        borderColor: 'orange',
+        marginTop: 10,
+    },
+    title: {
+        alignSelf: "center",
+        margin: 8,
+        fontSize: 16,
+        fontWeight: "bold",
     },
 });
 export default SingleProduct
