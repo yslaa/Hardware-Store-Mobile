@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
@@ -10,6 +10,26 @@ import TitleContainer from '@shared/Form/TitleContainer'
 import { Ionicons } from '@expo/vector-icons'
 import mime from "mime";
 import { useNavigation } from '@react-navigation/native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+
+const StarRating = ({ ratings, onRate }) => {
+    const stars = [1, 2, 3, 4, 5];
+    
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          {stars.map((star) => (
+            <TouchableOpacity key={star} onPress={() => onRate(star)}>
+              <Icon
+                name={star <= ratings ? 'star' : 'star-o'}
+                size={20}
+                color={star <= ratings ? 'orange' : 'gray'}
+              />
+            </TouchableOpacity>
+          ))}
+          <Text style={{ marginLeft: 5 }}>{ratings} stars</Text>
+        </View>
+      );
+  };
 
 const ReviewUpdate = (props) => {
     //console.log("Item: ", props.route.params.item)
@@ -51,11 +71,7 @@ const ReviewUpdate = (props) => {
                 })
                 .then((res) => {
                     if (res.status === 200 || res.status === 201) {
-                        Toast.show({
-                            topOffset: 60,
-                            type: 'success',
-                            text1: 'Comment Updated Successfully',
-                        });
+                        Alert.alert("Comment Updated")
                         navigation.navigate('Reviews');
                     }
                 })
@@ -72,6 +88,10 @@ const ReviewUpdate = (props) => {
             })
     };
 
+    const handleRate = (newRating) => {
+        setRatings(newRating);
+      };
+
 
   return (
     <TitleContainer title="Update Comment">
@@ -79,20 +99,14 @@ const ReviewUpdate = (props) => {
     <View style={styles.label}>
          <Text style={{ textDecorationLine: "underline"}}>Ratings</Text>
     </View>
-    <Input 
-       name='ratings'
-       id='ratings'
-       value={ratings}
-       minWidth="90%"
-       onChangeText={(text) => setRatings(text)}
-       />
+    <StarRating ratings={ratings} onRate={handleRate} />
 
     <View style={styles.label}>
-        <Text style={{ textDecorationLine: "underline"}}>Text</Text>
+        <Text style={{ textDecorationLine: "underline"}}>Comment</Text>
     </View>
     <Input 
-       name='tex'
-       id='tex'
+       name='text'
+       id='text'
        value={text}
        minWidth="90%"
        onChangeText={(text) => setText(text)}
