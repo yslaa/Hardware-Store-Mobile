@@ -299,7 +299,15 @@ const SingleProduct = ({ route }) => {
                 ) : <Text style={styles.unavailableText}>Currently Unavailable</Text>}
 
         <Divider style={styles.divider} />
-        <Text style={styles.title}>Comments and Ratings</Text>
+        <Text style={styles.title}>Reviews</Text>
+        {comments ? (
+        <>
+            <Text color="coolGray.800" _dark={{ color: 'warmGray.50' }} marginleft="2" alignSelf="center">
+                <Ratings value={comments.reduce((acc, comment) => acc + comment.ratings, 0) / comments.length} />
+            </Text>
+            <Divider style={styles.divider} />
+        </>
+        ) : null}
         {comments? comments.map((item) => {
                         return (
                             <>
