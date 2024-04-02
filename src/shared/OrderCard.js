@@ -24,7 +24,7 @@ const OrderCard = ({ item }) => {
   const [cardColor, setCardColor] = useState('');
   const navigation = useNavigation()
 
-  
+  console.log('Item: ', item)
   useEffect(() => {
     AsyncStorage.getItem("jwt")
         .then((res) => {
@@ -48,6 +48,7 @@ const OrderCard = ({ item }) => {
     const order = {
       dateOrdered: item.dateOrdered,
       id: item._id,
+      orderItem: item.orderItems,
       status: statusChange,
     };
 
