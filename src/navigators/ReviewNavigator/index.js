@@ -2,6 +2,7 @@ import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 
 import Reviews from "../../screens/User/Reviews"
+import ReviewUpdate from "../../screens/User/ListReview";
 
 
 const Stack = createStackNavigator();
@@ -17,6 +18,7 @@ const index= () => {
                     headerShown: false
                 }}
             />
+            <Stack.Screen name="ReviewUpdate" component={ReviewUpdate}/>
         </Stack.Navigator>
     )
 }

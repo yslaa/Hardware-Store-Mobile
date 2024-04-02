@@ -56,12 +56,11 @@ const Comment = ({ route }) => {
                 .then((res) => {
                     // console.log(res.data)
                     if (res.status == 200 || res.status == 201) {
-                        Toast.show({
+                      Toast.show({
                         topOffset: 60,
                         type: "success",
-                        text1: "Brand Details",
-                        text2: "",
-                        });
+                        text1: "Brand Details Get"
+                    });
                         setBrands(res.data)
                 }})
                 .catch((error) => {
@@ -169,7 +168,9 @@ const Comment = ({ route }) => {
               />
 
               <Button onPress={() => submitComment()} title="Submit Comment" size="sm" variant="outline" />
-              {/* <Toast /> */}
+              {/* <View style={styles.toastContainer}>
+                <Toast/>
+              </View> */}
             </View>
           ) : null}
         </View>
@@ -220,6 +221,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 10,
       },
+    toastContainer: {
+      position: 'absolute',
+      top: 20,
+      width: '100%',
+      paddingHorizontal: 20,
+      justifyContent: 'center'
+    }
 });
 
 export default Comment

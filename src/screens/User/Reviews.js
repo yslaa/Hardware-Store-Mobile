@@ -5,8 +5,8 @@ import baseURL from '@assets/commons/baseurl'
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import EasyButton from '@shared/StyledComponents/EasyButton'
-import { Searchbar } from 'react-native-paper';
-import ListItem from '@screens/Admin/ListItem'
+import Toast from 'react-native-toast-message'
+import ListReview from '@screens/User/ListReview'
 import {  Box } from 'native-base'
 import { Ionicons } from '@expo/vector-icons'
 import AuthGlobal from "@context/Store/AuthGlobal";
@@ -16,15 +16,16 @@ var { height,width } = Dimensions.get("window");
 
 const Reviews = (props) => {
     const context = useContext(AuthGlobal)
-    const [productsList, setProductsList] = useState([])
+    const [reviewList, setReviewList] = useState([])
     const [loading, setLoading] = useState(true)
-    const [productFilter, setProductFilter] = useState([])
     const [token, setToken] = useState('')
     const [refreshing, setRefreshing] = useState(false)
     const navigation = useNavigation()
 
-    // console.log("hello",productsList)
-    console.log("User Data: ",context)
+    const userID = context.stateUser.userProfile._id
+
+    // console.log("hello",commentList)
+    // console.log("User Data: ", context.stateUser.userProfile._id)
     const ListHeader = () => {
         return (
             <View
@@ -32,36 +33,39 @@ const Reviews = (props) => {
                 style={styles.listHeader}
             >
                 <View style={styles.headerItem}>
-                    <Text style={{ fontWeight: '600' }}>image</Text>
+                    <Text style={{ fontWeight: '600' }}>Rating</Text>
                 </View>
                 <View style={styles.headerItem}>
-                    <Text style={{ fontWeight: '600' }}>Name</Text>
-                </View>
-                <View style={styles.headerItem}>
-                    <Text style={{ fontWeight: '600' }}>Stock</Text>
+                    <Text style={{ fontWeight: '600' }}>Comment</Text>
                 </View>
                 <View style={styles.headerItem}></View>
                 <View style={styles.headerItem}>
-                    <Text style={{ fontWeight: '600' }}>Price</Text>
+                    <Text style={{ fontWeight: '600' }}>Product</Text>
                 </View>
             </View>
         )
     }
 
-    console.log("productfil",productFilter)
-    const deleteProduct = (id) =>
+    // console.log("productfil",productFilter)
+    const deleteComment = (id) =>
     {
-        axios 
-        .delete(`${baseURL}product/${id}`,{
-            headers: {Authorization: `Bearer ${token}`}
-        })
-        .then((res) =>
-        {
-            const products = productFilter.details.filter((item) => item.id !== id)
-            setProductFilter(products)
-        })
-        
-        .catch((error) => console.log(error))
+        AsyncStorage.getItem("jwt")
+            .then((res) => {
+                axios 
+                .delete(`${baseURL}comment/${id}`,{
+                    headers: {Authorization: `Bearer ${res}`}
+                })
+                .then((res) =>
+                {
+                    Toast.show({
+                        topOffset: 60,
+                        type: "Success",
+                        text1: "Comment Deleted",
+                    });
+                })
+                .catch((error) => console.log(error))
+            })
+       
     }
 
     const onRefresh = useCallback(() =>{
@@ -69,11 +73,12 @@ const Reviews = (props) => {
         setTimeout(() =>
         {
             axios
-            .get(`${baseURL}products`)
+            .get(`${baseURL}comments`, {
+                headers: {Authorization: `Bearer ${token}`}
+            })
             .then((res)=>
             {
-                setProductsList(res.data);
-                setProductFilter(res.data);
+                setReviewList(res.data);
                 setLoading(false);
             })
             setRefreshing(false);
@@ -86,25 +91,34 @@ const Reviews = (props) => {
                 AsyncStorage.getItem("jwt")
                     .then((res) => {
                         setToken(res)
+                        axios
+                        .get(`${baseURL}comments`,{
+                            headers: {Authorization: `Bearer ${res}`}
+                        })
+                        .then((res) => {
+                            const data = res.data.details;
+                            console.log(data)
+                            const comments = res.data.details;
+            
+                        // Filter comments based on userID
+                            const userComment = comments.filter((rev) => rev.user && rev.user._id === userID);
+                            setReviewList(userComment);
+                            setLoading(false)
+                        })
+                        .catch((error) => console.log(error.response.data))
                     })
                     .catch((error) => console.log(error))
-                axios
-                    .get(`${baseURL}products`)
-                    .then((res) => {
-                        // console.log(res.data)
-                        setProductsList(res.data);
-                        setProductFilter(res.data);
-                        setLoading(false);
-                    })
+                
                 return () => {
-                    setProductsList();
-                    setProductFilter();
+                    setReviewList();
                     setLoading(true);
                 }
             },
             [],
         )
     )
+
+    console.log("Reviews: ", reviewList)
 
     
   return (
@@ -118,13 +132,12 @@ const Reviews = (props) => {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
                 ListHeaderComponent={ListHeader}
-                data={productFilter.details}
+                data={reviewList}
                 renderItem={({ item, index }) => (
-                    <ListItem
+                    <ListReview
                         item={item}
                         index={index}
-                        deleteProduct={deleteProduct}
-
+                        deleteComment={deleteComment}
                     />
                 )}
                 keyExtractor={(item) => item.id}
